@@ -1,0 +1,3 @@
+<div th:each="img : ${images}" class="col-xs-4">
+	<img th:src="@{phones/{id}(id=${img})}" />
+</div>

@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<head th:fragment="header" xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8" />
+<link href="/assets/css/bootstrap.css" rel="stylesheet" />
+<link href="/assets/css/style.css" rel="stylesheet" />
+<link href="/assets/css/font-awesome.min.css" rel="stylesheet" />
+<script type="text/javascript" src="/assets/js/jquery-2.2.4.js"></script>
+<script type="text/javascript" src="/assets/auctions.js"></script>
+</head>
+<div th:fragment="menu" xmlns:th="http://www.thymeleaf.org">
+	<!-- Fixed navbar -->
+	<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target=".navbar-collapse">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/"><i>Super - Auctions</i></a>
+			</div>
+			<div class="navbar-collapse collapse navbar-right">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="/">HOME</a></li>
+					<li><a href="about.html">ABOUT</a></li>
+					<li><a href="contact.html">CONTACT</a></li>
+					<li><a href="" th:href="@{/auctions/add}">ADD</a></li>
+				</ul>
+			</div>
+			<!--/.nav-collapse -->
+		</div>
+	</div>
+	<br /> <br /> <br /> <br />
+</div>
+
+<div id="footerwrap" th:fragment="footer"
+	xmlns:th="http://www.thymeleaf.org">
+	footer
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-4">
+				<h4>About</h4>
+				<div class="hline-w"></div>
+				<p>Lorem Ipsum is simply dummy text of the printing and
+					typesetting industry. Lorem Ipsum has been the industry's standard
+					dummy text ever since the 1500s.</p>
+			</div>
+			<div class="col-lg-4">
+				<h4>Social Links</h4>
+				<div class="hline-w"></div>
+				<p>
+					<a href="#"><i class="fa fa-dribbble"></i></a> <a href="#"><i
+						class="fa fa-facebook"></i></a> <a href="#"><i
+						class="fa fa-twitter"></i></a> <a href="#"><i
+						class="fa fa-instagram"></i></a> <a href="#"><i
+						class="fa fa-tumblr"></i></a>
+				</p>
+			</div>
+			<div class="col-lg-4">
+				<h4>Our Bunker</h4>
+				<div class="hline-w"></div>
+				<p>
+					Some Ave, 987,<br /> 23890, New York,<br /> United States.<br />
+				</p>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+
+<div th:fragment="field" class="form-group" xmlns:th="http://www.thymeleaf.org">
+<!-- fragments/field -->
+				<label for="exampleInputFile" class="label-control" th:text="${label}">name</label> <input
+					name="name" value="Jan" th:value="${value}" class="form-control" />
+				<p class="help-block">Example block-level help text here.</p>
+			</div>

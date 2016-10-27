@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Getting Started: Serving Web Content</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="assets/css/bootstrap.css" rel="stylesheet" />
+<link href="assets/css/style.css" rel="stylesheet" />
+<link href="assets/css/font-awesome.min.css" rel="stylesheet" />
+<script type="text/javascript" src="assets/js/jquery-2.2.4.js"></script>
+<script type="text/javascript" src="products.js"></script>
+</head>
+<body>
+<div th:utext="${value}"></div>
+	<div class="container">
+		<form method="get">
+			<div th:include="layout/fragments::field" th:with="value='mario',label=#{'customer.name'}"/>
+
+			<button type="submit">Add</button>
+		</form>
+		<a href="#" id="refresh">Odswiez</a>
+		<ul>
+			<li th:fragment="lista" th:each="el : ${persons}" th:text="${el}">Nowak</li>
+		</ul>
+	</div>
+</body>
+</html>
