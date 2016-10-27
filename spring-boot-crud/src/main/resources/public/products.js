@@ -11,7 +11,7 @@ $(document).ready(function() {
 	// });
 	// })
 	$("#refresh").click(function() {
-		$.get('', function(data) {
+		$.get('/altkom/greeting', function(data) {
 			$("ul").html(data)
 		})
 	})

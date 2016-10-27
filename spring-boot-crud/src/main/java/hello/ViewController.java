@@ -3,6 +3,8 @@ package hello;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -14,16 +16,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class ViewController {
+	@Inject
+	ProductService productService;
 	List<String> persons = new ArrayList();
 
 	@RequestMapping(value = "/greeting", method = RequestMethod.GET)
-	public String greeting(
-			Model model,
-			@RequestParam(required = false) String name,
+	public String greeting(Model model, @RequestParam(required = false) String name,
 			@RequestHeader(value = "X-Requested-With", required = false) String ajaxHeader) {
-		model.addAttribute("value",
-				"<script>$(document.body).empty();</script>");
+		model.addAttribute("value", "<script>$(document.body).empty();</script>");
 		if (name != null) {
+			productService.veryReportGeneration();
+			productService.veryReportGeneration();
+			productService.veryReportGeneration();
 			persons.add(name);
 		}
 		if (ajaxHeader != null) {

@@ -1,0 +1,18 @@
+CXF
+jobs
+asynch
+baner
+actuator
+ * mappings
+ * health (management.info.git.mode=full)
+ * metrics
+ * trace
+spring testing
+emma
+spring data
+
+cache
+jProfiler
+Takipi
+
+JENKINS
