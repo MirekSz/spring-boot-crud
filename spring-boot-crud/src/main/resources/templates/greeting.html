@@ -13,24 +13,30 @@
 	<br />
 	<div class="container">
 		<div class="panel panel-default">
-			<div class="panel-body" >
-				<form method="get">
+			<div class="panel-body">
+				<form method="post" th:object="${person}" enctype="multipart/form-data">
 					<div th:include="layout/fragments::field"
-						th:with="value='mario',label=#{'customer.name'}" />
-
-					<button type="submit" class="btn btn-default">Add</button>
+						th:with="name='name',label=#{'person.name'}"></div>
+					<div th:include="layout/fragments::imgField"
+						th:with="name='file',label=#{'person.phone'}"></div>
+					<br />
+					<button type="submit" class="btn btn-default">Add person</button>
 				</form>
 			</div>
 		</div>
 		<div class="panel panel-default">
-			<div class="panel-heading clearfix" >
-				<a href="#" id="refresh" class="btn btn-default pull-right" >Odswiez</a>
+			<div class="panel-heading clearfix">
+				<a href="#" id="refresh" class="btn btn-default pull-right">Odswiez</a>
 			</div>
-			<div class="panel-body" >
+			<div class="panel-body">
 
 				<ul class="list-group">
-				
-					<li class="list-group-item" th:fragment="lista" th:each="el,iterStat  : ${persons}" th:text="${iterStat.count  +'. '+ el}"> Nowak</li>
+
+					<li class="list-group-item clearfix" th:fragment="lista"
+						th:each="el,iterStat  : ${persons}"><div class="row"><h2 class="col-xs-4"
+							th:text="${iterStat.count  +'. '+ el.name}"></h2>
+							<img class="pull-right col-xs-8" style="width:120px" th:src="@{'/phones/'+${el.phone}}"/></div>
+							</li>
 				</ul>
 			</div>
 		</div>

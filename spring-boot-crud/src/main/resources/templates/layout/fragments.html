@@ -70,9 +70,21 @@
 </div>
 
 
-<div th:fragment="field" class="form-group" xmlns:th="http://www.thymeleaf.org">
-<!-- fragments/field -->
-				<label for="exampleInputFile" class="label-control" th:text="${label}">name</label> <input
-					name="name" value="Jan" th:value="${value}" class="form-control" />
-				<p class="help-block">Example block-level help text here.</p>
-			</div>
+<div th:fragment="field" class="form-group"
+	xmlns:th="http://www.thymeleaf.org">
+	<!-- fragments/field -->
+	<label class="label-control" th:text="${label}">name </label> 
+	
+	<input
+		th:name="${name}" value="Jan" th:value="*{__${name}__}"
+		class="form-control" />
+	<p class="help-block"><p th:each="err : ${#fields.errors(__${name}__)}" th:text="${err}" style="color:red"/></p>
+		
+</div>
+
+<div th:fragment="imgField" class="form-group"
+	xmlns:th="http://www.thymeleaf.org">
+	<!-- fragments/imgfield -->
+	<label class="label-control" th:text="${label}">name</label> <input
+		th:name="${name}" value="Jan" type="file" />
+</div>
