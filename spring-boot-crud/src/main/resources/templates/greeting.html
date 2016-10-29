@@ -14,8 +14,19 @@
 	<div class="container">
 		<div class="panel panel-default">
 			<div class="panel-body">
-				<form method="post" th:object="${person}" enctype="multipart/form-data">
-					<div th:include="layout/fragments::field"
+				<form method="post" th:object="${person}"
+					enctype="multipart/form-data" class="form">
+					<div th:if="${#fields.hasGlobalErrors()}">
+						<div class="alert alert-danger">
+							<span class="glyphicon glyphicon-exclamation-sign pull-right"
+								aria-hidden="true"></span>
+							<ul style="padding-left: 10px">
+								<li th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</li>
+							</ul>
+						</div>
+					</div>
+
+					<div th:include="layout/fragments::field" th:remove="tag"
 						th:with="name='name',label=#{'person.name'}"></div>
 					<div th:include="layout/fragments::imgField"
 						th:with="name='file',label=#{'person.phone'}"></div>
@@ -33,10 +44,11 @@
 				<ul class="list-group">
 
 					<li class="list-group-item clearfix" th:fragment="lista"
-						th:each="el,iterStat  : ${persons}"><div class="row"><h2 class="col-xs-4"
-							th:text="${iterStat.count  +'. '+ el.name}"></h2>
-							<img class="pull-right col-xs-8" style="width:120px" th:src="@{'/phones/'+${el.phone}}"/></div>
-							</li>
+						th:each="el,iterStat  : ${persons}"><div class="row">
+							<h2 class="col-xs-4" th:text="${iterStat.count  +'. '+ el.name}"></h2>
+							<img class="pull-right col-xs-8" style="width: 120px"
+								th:src="@{'/phones/'+${el.phone}}" />
+						</div></li>
 				</ul>
 			</div>
 		</div>

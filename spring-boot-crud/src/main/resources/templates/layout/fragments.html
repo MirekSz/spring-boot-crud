@@ -69,22 +69,25 @@
 	</div>
 </div>
 
+<div th:fragment="field" xmlns:th="http://www.thymeleaf.org">
+	<div class="form-group"
+		th:classappend="${#fields.hasErrors('*{__${name}__}')}? 'has-error'">
+		<!-- fragments/field -->
+		<label class="control-label" th:text="${label}">name </label>
+		<div class="controls">
+		 <input
+			th:field="*{__${name}__}" th:errorclass="error" th:name="${name}"
+			value="Jan" th:value="*{__${name}__}" class="form-control" /> <span
+			class="help-block" th:if="${#fields.hasErrors('*{__${name}__}')}"
+			th:errors="*{__${name}__}"></span>
+			</div>
 
-<div th:fragment="field" class="form-group"
-	xmlns:th="http://www.thymeleaf.org">
-	<!-- fragments/field -->
-	<label class="label-control" th:text="${label}">name </label> 
-	
-	<input
-		th:name="${name}" value="Jan" th:value="*{__${name}__}"
-		class="form-control" />
-	<p class="help-block"><p th:each="err : ${#fields.errors(__${name}__)}" th:text="${err}" style="color:red"/></p>
-		
+	</div>
 </div>
-
-<div th:fragment="imgField" class="form-group"
-	xmlns:th="http://www.thymeleaf.org">
-	<!-- fragments/imgfield -->
-	<label class="label-control" th:text="${label}">name</label> <input
-		th:name="${name}" value="Jan" type="file" />
+<div th:fragment="imgField" xmlns:th="http://www.thymeleaf.org">
+	<div  class="form-group">
+		<!-- fragments/imgfield -->
+		<label class="control-label" th:text="${label}">name</label> <input
+			th:name="${name}" value="Jan" type="file" />
+	</div>
 </div>
