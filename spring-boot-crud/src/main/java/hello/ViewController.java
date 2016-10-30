@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,9 +29,11 @@ public class ViewController {
 	Resource[] resources;
 	List<Person> persons = new ArrayList();
 
+	@Inject
+	private SimpMessagingTemplate webSocket;
+
 	@RequestMapping(value = "/greeting", method = RequestMethod.GET)
-	public String greeting(Model model,
-			@RequestHeader(value = "X-Requested-With", required = false) String ajaxHeader) {
+	public String greeting(Model model, @RequestHeader(value = "X-Requested-With", required = false) String ajaxHeader) {
 		model.addAttribute("person", new Person());
 		if (ajaxHeader != null) {
 			return "greeting :: lista";
@@ -50,6 +53,7 @@ public class ViewController {
 		productService.veryReportGeneration();
 		person.phone = resources[persons.size()].getFilename();
 		persons.add(person);
+		webSocket.convertAndSend("/topic/products-change", true);
 		return "redirect:/greeting";
 	}
 
