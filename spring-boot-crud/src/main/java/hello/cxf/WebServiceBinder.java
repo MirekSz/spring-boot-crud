@@ -13,11 +13,12 @@ import org.apache.cxf.jaxws.EndpointImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 
 @Configuration
-// @Profile({ "prod", "dev" })
+@Profile({ "!test" })
 public class WebServiceBinder {
 
 	@Autowired
