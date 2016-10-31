@@ -13,7 +13,17 @@ $(document).ready(function() {
 	$("#refresh").click(function() {
 		refreshState()
 	})
+	
+	$("#addTag").click(function(e) {
+		addTag();
+		e.preventDefault();
+	})
 })
+
+function addTag(){
+	var length = $("#tags input").length
+	$("#tags").append('<input name="tags['+length+'].name" class="form-control col-xs-2"/>')
+}
 function refreshState(){
 	$.get('/altkom/greeting', function(data) {
 		$("ul").html(data)

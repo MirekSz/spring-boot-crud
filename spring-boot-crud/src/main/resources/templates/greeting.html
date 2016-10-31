@@ -28,10 +28,15 @@
 						</div>
 					</div>
 
-					<div th:replace="layout/fragments::field(label=#{'person.name'},name='name')" ></div>
+					<div
+						th:replace="layout/fragments::field(label=#{'person.name'},name='name')"></div>
 					<div th:include="layout/fragments::imgField"
 						th:with="name='file',label=#{'person.phone'}"></div>
-					<br />
+					<div>
+						<button class="btn btn-primary" id="addTag">Add tag</button>
+						<div id="tags" class="form-inline form-group"></div>
+					</div>
+					<br /> <br />
 					<button type="submit" class="btn btn-default">Add person</button>
 				</form>
 			</div>
@@ -46,7 +51,8 @@
 
 					<li class="list-group-item clearfix" th:fragment="lista"
 						th:each="el,iterStat  : ${persons}"><div class="row">
-							<h2 class="col-xs-4" th:text="${iterStat.count  +'. '+ el.name}"></h2>
+							<h2 class="col-xs-4" th:text="${iterStat.count  +'. '+ el.name +' ('+el.tags.size()+')'}"></h2>
+
 							<img class="pull-right col-xs-8" style="width: 120px"
 								th:src="@{'/phones/'+${el.phone}}" />
 						</div></li>

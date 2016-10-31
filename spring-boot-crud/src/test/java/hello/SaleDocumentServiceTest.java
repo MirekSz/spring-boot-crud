@@ -1,11 +1,6 @@
 package hello;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import hello.model.Product;
-import hello.repo.ProductRepo;
-import hello.service.DocumentRequest;
-import hello.service.Item;
-import hello.service.SaleDocumentService;
 
 import java.math.BigDecimal;
 
@@ -19,6 +14,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+
+import hello.model.Product;
+import hello.repo.ProductRepo;
+import hello.service.DocumentRequest;
+import hello.service.Item;
+import hello.service.SaleDocumentService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class, loader = SpringApplicationContextLoader.class)

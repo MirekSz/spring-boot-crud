@@ -17,8 +17,10 @@ import org.springframework.context.annotation.Profile;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 
+import hello.lib.Profiles;
+
 @Configuration
-@Profile({ "!test" })
+@Profile(Profiles.NOT_TEST)
 public class WebServiceBinder {
 
 	@Autowired

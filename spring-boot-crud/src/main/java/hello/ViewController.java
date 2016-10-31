@@ -35,7 +35,8 @@ public class ViewController {
 	private SimpMessagingTemplate webSocket;
 
 	@RequestMapping(value = "/greeting", method = RequestMethod.GET)
-	public String greeting(Model model, @RequestHeader(value = "X-Requested-With", required = false) String ajaxHeader) {
+	public String greeting(Model model,
+			@RequestHeader(value = "X-Requested-With", required = false) String ajaxHeader) {
 		model.addAttribute("person", new Person());
 		if (ajaxHeader != null) {
 			return "greeting :: lista";
@@ -63,6 +64,7 @@ public class ViewController {
 		@NotEmpty
 		private String name;
 		private String phone;
+		private List<Tag> tags = new ArrayList<>();
 
 		public String getName() {
 			return name;
@@ -78,6 +80,35 @@ public class ViewController {
 
 		public void setPhone(String phone) {
 			this.phone = phone;
+		}
+
+		public List<Tag> getTags() {
+			return tags;
+		}
+
+		public void setTags(List<Tag> tags) {
+			this.tags = tags;
+		}
+	}
+
+	public static class Tag {
+		private Long id;
+		private String name;
+
+		public Long getId() {
+			return id;
+		}
+
+		public void setId(Long id) {
+			this.id = id;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
 		}
 	}
 

@@ -7,9 +7,11 @@ import org.springframework.web.socket.config.annotation.AbstractWebSocketMessage
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 
+import hello.lib.Profiles;
+
 @Configuration
 @EnableWebSocketMessageBroker
-@Profile({ "!test" })
+@Profile(Profiles.NOT_TEST)
 public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
 	@Override
