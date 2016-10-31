@@ -1,3 +1,5 @@
+shell cf = context.getAttributes()['spring.beanfactory']
+
 CXF
 jobs
 asynch
