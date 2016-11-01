@@ -8,10 +8,11 @@ import javax.inject.Inject;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationContextLoader;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +23,7 @@ import hello.service.Item;
 import hello.service.SaleDocumentService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = Application.class, loader = SpringApplicationContextLoader.class)
+@SpringBootTest(classes = Application.class)
 @Rollback
 @Transactional
 @ActiveProfiles("test")
@@ -31,6 +32,8 @@ public class SaleDocumentServiceTest {
 	private SaleDocumentService service;
 	@Inject
 	ProductRepo productRepo;
+	@MockBean
+	SimpMessagingTemplate simpMessagingTemplate;
 
 	@Test
 	public void shouldUpdateStockWhenSaleProduct() {
