@@ -8,7 +8,6 @@ import javax.validation.Valid;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.Resource;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
@@ -22,11 +21,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import hello.model.Product;
+import hello.repo.ProductRepo;
+
 @Controller
-@Profile({ "!test" })
 public class ViewController {
 	@Inject
 	ProductService productService;
+	@Inject
+	ProductRepo repo;
+
 	@Value("classpath:/public/phones/*.jpg")
 	Resource[] resources;
 	List<Person> persons = new ArrayList();
@@ -116,6 +120,12 @@ public class ViewController {
 	@ResponseBody
 	public List<Person> asJson() {
 		return persons;
+	}
+
+	@RequestMapping(value = "/products", method = RequestMethod.GET)
+	@ResponseBody
+	public List<Product> products() {
+		return repo.findAll();
 	}
 
 	@ModelAttribute("persons")
