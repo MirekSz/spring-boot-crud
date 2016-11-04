@@ -1,8 +1,11 @@
 package hello;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.validation.Valid;
 
@@ -38,6 +41,17 @@ public class ViewController {
 	@Inject
 	private SimpMessagingTemplate webSocket;
 
+	@PostConstruct
+	public void init() {
+		for (int i = 0; i < 50; i++) {
+			Person person = new Person();
+			person.setName("Name" + i);
+			person.id = (long) i;
+			person.phone = resources[persons.size()].getFilename();
+			persons.add(person);
+		}
+	}
+
 	@RequestMapping(value = "/greeting", method = RequestMethod.GET)
 	public String greeting(Model model,
 			@RequestHeader(value = "X-Requested-With", required = false) String ajaxHeader) {
@@ -65,6 +79,7 @@ public class ViewController {
 	}
 
 	public static class Person {
+		private Long id;
 		@NotEmpty
 		private String name;
 		private String phone;
@@ -93,6 +108,14 @@ public class ViewController {
 		public void setTags(List<Tag> tags) {
 			this.tags = tags;
 		}
+
+		public Long getId() {
+			return id;
+		}
+
+		public void setId(Long id) {
+			this.id = id;
+		}
 	}
 
 	public static class Tag {
@@ -118,8 +141,13 @@ public class ViewController {
 
 	@RequestMapping(value = "/asJSON", method = RequestMethod.GET)
 	@ResponseBody
-	public List<Person> asJson() {
-		return persons;
+	public Map<String, Object> asJson(
+			@RequestParam(value = "page", required = false, defaultValue = "1") Integer page) {
+		Map<String, Object> res = new HashMap<>();
+		res.put("items", persons.subList((page - 1) * 10, ((page - 1) * 10) + 10));
+		res.put("total_count", 100);
+		res.put("page", page);
+		return res;
 	}
 
 	@RequestMapping(value = "/products", method = RequestMethod.GET)
