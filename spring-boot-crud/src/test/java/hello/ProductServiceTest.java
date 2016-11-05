@@ -9,6 +9,7 @@ import hello.repo.ProductRepo;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
@@ -59,6 +60,7 @@ public class ProductServiceTest {
 
 		// when
 		List<Product> byName = productRepo.getByName("ro");
+		Stream<Product> findByName = productRepo.findAllByName("romet");
 
 		// then
 		assertThat(byName).hasSize(2);
