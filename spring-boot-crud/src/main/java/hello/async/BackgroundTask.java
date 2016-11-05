@@ -1,7 +1,5 @@
 package hello.async;
 
-import hello.model.Product;
-
 import java.util.Date;
 
 import javax.persistence.EntityManager;
@@ -19,7 +17,7 @@ public class BackgroundTask {
 	@Transactional
 	@Scheduled(fixedDelay = 5000)
 	public void run() {
-		em.persist(new Product());
+		// em.persist(new Product());
 		System.out.println("BackgroundTask " + new Date());
 	}
 }
