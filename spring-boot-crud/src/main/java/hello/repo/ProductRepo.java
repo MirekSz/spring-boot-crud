@@ -12,7 +12,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductRepo extends JpaRepository<Product, Long> {
-	@Query("SELECT p FROM Product p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%',:name, '%')) ORDER BY p.name ASC")
+	// @Query("SELECT p FROM Product p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%',:name, '%')) ORDER BY p.name ASC")
+	@Query("SELECT p FROM Product p WHERE LOWER(p.name) LIKE LOWER(:#{'%'+#name+'%'}) ORDER BY p.name ASC")
 	List<Product> getByName(@Param("name") String name);
 
 	@Query("SELECT p FROM Product p WHERE p.name = :name")
