@@ -14,23 +14,12 @@ import java.util.stream.Stream;
 import javax.inject.Inject;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = Application.class)
-@Rollback
-@Transactional
-@ActiveProfiles("test")
-public class ProductServiceTest {
+public class ProductServiceTest extends BaseTest {
 	@Inject
 	private ProductService service;
 	@Inject

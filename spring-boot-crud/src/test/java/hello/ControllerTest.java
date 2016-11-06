@@ -3,6 +3,9 @@ package hello;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import hello.ViewController.Person;
+import hello.model.Product;
+import hello.repo.ProductRepo;
 
 import java.math.BigDecimal;
 
@@ -10,32 +13,17 @@ import javax.inject.Inject;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import hello.ViewController.Person;
-import hello.model.Product;
-import hello.repo.ProductRepo;
-
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = Application.class)
-@Rollback
-@Transactional
-@ActiveProfiles("test")
-public class ControllerTest {
+public class ControllerTest extends BaseTest {
 	private MockMvc mvc;
 	@Inject
 	ViewController controller;
