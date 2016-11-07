@@ -74,10 +74,14 @@ var new_conn = function() {
 	sockjs = new SockJS(sockjs_url);
 
 	stompClient = Stomp.over(sockjs);
-	stompClient.connect({}, function(frame) {
+	stompClient.connect({login:'mirek'}, function(frame) {
 		console.log('Connected: ' + frame);
 		stompClient.subscribe('/topic/products-change', function(greeting) {
 			refreshState()
+		});
+		stompClient.subscribe("/queue/mirek/priv", function(greeting) {
+			debugger;
+			alert(greeting)
 		});
 	}, function() {
 		setTimeout(function() {

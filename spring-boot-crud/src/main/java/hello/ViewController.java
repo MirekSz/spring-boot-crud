@@ -1,8 +1,5 @@
 package hello;
 
-import hello.model.Product;
-import hello.repo.ProductRepo;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +24,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
+import hello.model.Product;
+import hello.repo.ProductRepo;
 
 @Controller
 public class ViewController {
@@ -54,7 +54,8 @@ public class ViewController {
 	}
 
 	@RequestMapping(value = "/greeting", method = RequestMethod.GET)
-	public String greeting(Model model, @RequestHeader(value = "X-Requested-With", required = false) String ajaxHeader) {
+	public String greeting(Model model,
+			@RequestHeader(value = "X-Requested-With", required = false) String ajaxHeader) {
 		model.addAttribute("person", new Person());
 		if (ajaxHeader != null) {
 			return "greeting :: lista";
@@ -84,6 +85,7 @@ public class ViewController {
 		person.phone = resources[persons.size()].getFilename();
 		persons.add(person);
 		webSocket.convertAndSend("/topic/products-change", true);
+		webSocket.convertAndSend("/queue/mirek/priv", "dawaj");
 		return "redirect:/greeting";
 	}
 
@@ -150,7 +152,8 @@ public class ViewController {
 
 	@RequestMapping(value = "/asJSON", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String, Object> asJson(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page) {
+	public Map<String, Object> asJson(
+			@RequestParam(value = "page", required = false, defaultValue = "1") Integer page) {
 		Map<String, Object> res = new HashMap<>();
 		res.put("items", persons.subList((page - 1) * 10, ((page - 1) * 10) + 10));
 		res.put("total_count", 100);
