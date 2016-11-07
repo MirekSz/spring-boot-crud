@@ -1,33 +1,21 @@
 package hello;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
-import java.math.BigDecimal;
-
-import javax.inject.Inject;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
-
 import hello.model.Product;
 import hello.repo.ProductRepo;
 import hello.service.DocumentRequest;
 import hello.service.Item;
 import hello.service.SaleDocumentService;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = Application.class)
-@Rollback
-@Transactional
-@ActiveProfiles("test")
-public class SaleDocumentServiceTest {
+import java.math.BigDecimal;
+
+import javax.inject.Inject;
+
+import org.junit.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+
+public class SaleDocumentServiceTest extends BaseTest {
 	@Inject
 	private SaleDocumentService service;
 	@Inject

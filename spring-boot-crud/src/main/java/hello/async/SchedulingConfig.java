@@ -34,7 +34,7 @@ public class SchedulingConfig implements SchedulingConfigurer {
 
 			@Override
 			public void handleError(Throwable e) {
-				log.error("Jest zle " + e);
+				log.error("Jest zle " + e, e);
 
 			}
 		});

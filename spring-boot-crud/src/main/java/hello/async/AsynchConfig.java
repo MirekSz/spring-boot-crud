@@ -40,7 +40,8 @@ public class AsynchConfig implements AsyncConfigurer {
 
 			@Override
 			public void handleUncaughtException(Throwable arg0, Method arg1, Object... arg2) {
-				log.error("Jest zle " + arg0);
+				// tylko dla void
+				log.error("Jest zle " + arg0, arg0);
 
 			}
 		};
