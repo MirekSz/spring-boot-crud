@@ -80,8 +80,7 @@ var new_conn = function() {
 			refreshState()
 		});
 		stompClient.subscribe("/queue/mirek/priv", function(greeting) {
-			debugger;
-			alert(greeting)
+			console.log(greeting)
 		});
 	}, function() {
 		setTimeout(function() {
@@ -91,3 +90,7 @@ var new_conn = function() {
 	});
 };
 new_conn();
+
+setTimeout(function() {
+	 stompClient.send("/altkom/topic/hello", {}, JSON.stringify({'name': 'mirek'}));
+},2000)

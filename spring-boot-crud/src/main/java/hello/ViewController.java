@@ -13,6 +13,7 @@ import javax.validation.Valid;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,6 +42,11 @@ public class ViewController {
 
 	@Inject
 	private SimpMessagingTemplate webSocket;
+
+	@MessageMapping("/topic/hello")
+	public void greeting(Map<String, Object> message) throws Exception {
+		webSocket.convertAndSend("/queue/mirek/priv", "Witam " + message.get("name"));
+	}
 
 	@PostConstruct
 	public void init() {
@@ -85,7 +91,6 @@ public class ViewController {
 		person.phone = resources[persons.size()].getFilename();
 		persons.add(person);
 		webSocket.convertAndSend("/topic/products-change", true);
-		webSocket.convertAndSend("/queue/mirek/priv", "dawaj");
 		return "redirect:/greeting";
 	}
 

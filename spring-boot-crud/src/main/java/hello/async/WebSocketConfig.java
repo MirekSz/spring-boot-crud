@@ -1,5 +1,6 @@
 package hello.async;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -13,11 +14,13 @@ import hello.lib.Profiles;
 @EnableWebSocketMessageBroker
 @Profile(Profiles.NOT_TEST)
 public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
+	@Value("${server.context-path}")
+	private String appContext;
 
 	@Override
 	public void configureMessageBroker(MessageBrokerRegistry config) {
 		config.enableSimpleBroker("/topic", "/queue");
-		config.setApplicationDestinationPrefixes("/altkom");
+		config.setApplicationDestinationPrefixes(appContext);
 	}
 
 	@Override
