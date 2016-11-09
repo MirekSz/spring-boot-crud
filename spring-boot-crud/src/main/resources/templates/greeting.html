@@ -37,6 +37,8 @@
 						th:replace="layout/fragments::field(label=#{'person.name'},name='name')"></div>
 					<div th:include="layout/fragments::imgField"
 						th:with="name='file',label=#{'person.phone'}"></div>
+					<div th:include="layout/fragments::imgField"
+						th:with="name='file',label=#{'person.phone'}"></div>
 					<div>
 						<button class="btn btn-primary" id="addTag">Add tag</button>
 						<div id="tags" class="form-inline form-group"></div>
