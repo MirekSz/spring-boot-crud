@@ -31,7 +31,7 @@ $(document)
 											data : function(params) {
 												return {
 													q : params.term, // search
-																		// term
+													// term
 													page : params.page
 												};
 											},
@@ -75,26 +75,24 @@ $(document)
 										},
 										allowClear : true
 									});
-				})
-function upload() {
-	var uploadUrl = serverUrl + "continueFileUpload";
-	var formData = new FormData();
-	formData.append("file", file.files[0]);
-	$http({
-		method : 'POST',
-		url : uploadUrl,
-		headers : {
-			'Content-Type' : undefined
-		},
-		data : formData,
-		transformRequest : function(data, headersGetterFunction) {
-			return data;
-		}
-	}).success(function(data, status) {
-		alert("success");
-	})
+				});
 
-};
+function collectFormData(fields) {
+	var formData = new FormData();
+debugger
+	for (var i = 0; i < fields.length; i++) {
+		var $item = $(fields[i]);
+
+		if ($item.attr('type') == "file") {
+			var file = $item.prop('files')[0];
+			formData.append($item.attr('name'), file);
+
+		} else {
+			formData.append($item.attr('name'), $item.val());
+		}
+	}
+	return formData;
+}
 function addTag() {
 	var length = $("#tags input").length
 	$("#tags").append(
@@ -107,31 +105,20 @@ function refreshState() {
 	})
 }
 
-function upload() {
-	var formData = new FormData();
-	var files =$("input[type='file']").map((index,element)=>{
-		return $(element).prop("files")[0];
-	})
-	debugger
-	for(let f of files){
-	formData.append("file", f);
-	}
-	if(files.length>0){
+function submitViaAJAX(formId) {
+	var formData = collectFormData($("#"+formId+" input"))
 	$.ajax({
 		method : 'POST',
-		 processData: false,
-         cache: false,
-		url : 'http://localhost:8080/altkom/upload',
-		contentType: false,
+		processData : false,
+		cache : false,
+		url : 'http://localhost:8080/altkom/greeting',
+		contentType : false,
 		data : formData,
 		transformRequest : function(data, headersGetterFunction) {
 			return data;
 		}
 	}).success(function(data, status) {
-		alert("success");
 	})
-	}
-
 }
 var sockjs_url = '/altkom/websocket';
 var sockjs
@@ -159,7 +146,6 @@ var new_conn = function() {
 new_conn();
 
 setTimeout(function() {
-	upload()
 	stompClient.send("/altkom/topic/hello", {}, JSON.stringify({
 		'name' : 'mirek'
 	}));

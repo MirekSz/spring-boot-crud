@@ -20,7 +20,7 @@
 		<div class="panel panel-default">
 			<div class="panel-body">
 				<form method="post" th:object="${person}"
-					enctype="multipart/form-data" class="form">
+					enctype="multipart/form-data" class="form" id="productForm">
 					<div th:if="${#fields.hasGlobalErrors()}">
 						<div class="alert alert-danger">
 							<span class="glyphicon glyphicon-exclamation-sign pull-right"
@@ -45,6 +45,7 @@
 					</div>
 					<br /> <br />
 					<button type="submit" class="btn btn-default">Add person</button>
+					<button type="submit" class="btn btn-default" onclick="submitViaAJAX('productForm');return false;">Add person via ajax</button>
 				</form>
 			</div>
 		</div>
