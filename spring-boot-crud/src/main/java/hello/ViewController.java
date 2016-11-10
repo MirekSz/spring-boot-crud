@@ -1,8 +1,5 @@
 package hello;
 
-import hello.model.Product;
-import hello.repo.ProductRepo;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +14,7 @@ import javax.ws.rs.core.HttpHeaders;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +31,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import hello.model.Product;
+import hello.repo.ProductRepo;
+import hello.service.ProductChangeEvent;
+import hello.service.ProductService;
+
 @Controller
 public class ViewController {
 	@Inject
@@ -47,6 +50,9 @@ public class ViewController {
 	@Inject
 	private SimpMessagingTemplate webSocket;
 
+	@Inject
+	ApplicationEventPublisher eventBus;
+
 	@MessageMapping("/topic/hello")
 	public void greeting(Map<String, Object> message) throws Exception {
 		webSocket.convertAndSend("/queue/mirek/priv", "Witam " + message.get("name"));
@@ -54,7 +60,7 @@ public class ViewController {
 
 	@PostConstruct
 	public void init() {
-		for (int i = 0; i < 50; i++) {
+		for (int i = 0; i < 5; i++) {
 			Person person = new Person();
 			person.setName("Name" + i);
 			person.id = (long) i;
@@ -64,7 +70,8 @@ public class ViewController {
 	}
 
 	@RequestMapping(value = "/greeting", method = RequestMethod.GET)
-	public String greeting(Model model, @RequestHeader(value = "X-Requested-With", required = false) String ajaxHeader) {
+	public String greeting(Model model,
+			@RequestHeader(value = "X-Requested-With", required = false) String ajaxHeader) {
 		model.addAttribute("person", new Person());
 		if (ajaxHeader != null) {
 			return "greeting :: lista";
@@ -78,8 +85,9 @@ public class ViewController {
 	public ResponseEntity<Resource> download() throws Exception {
 		Resource file = new UrlResource(new File("C:\\Users\\Mirek\\Desktop\\pro.jpg").toURI());
 		return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
-		// .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" +
-		// file.getFilename() + "\"")
+				// .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;
+				// filename=\"" +
+				// file.getFilename() + "\"")
 				.body(file);
 	}
 
@@ -107,8 +115,8 @@ public class ViewController {
 		// }
 		System.out.println("ALL DONE");
 		person.phone = resources[persons.size()].getFilename();
-		persons.add(person);
-		webSocket.convertAndSend("/topic/products-change", true);
+		persons.add(0, person);
+		eventBus.publishEvent(new ProductChangeEvent());
 		return "redirect:/greeting";
 	}
 
@@ -175,7 +183,8 @@ public class ViewController {
 
 	@RequestMapping(value = "/asJSON", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String, Object> asJson(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page) {
+	public Map<String, Object> asJson(
+			@RequestParam(value = "page", required = false, defaultValue = "1") Integer page) {
 		Map<String, Object> res = new HashMap<>();
 		res.put("items", persons.subList((page - 1) * 10, ((page - 1) * 10) + 10));
 		res.put("total_count", 100);

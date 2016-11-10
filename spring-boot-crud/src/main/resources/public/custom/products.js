@@ -79,7 +79,6 @@ $(document)
 
 function collectFormData(fields) {
 	var formData = new FormData();
-debugger
 	for (var i = 0; i < fields.length; i++) {
 		var $item = $(fields[i]);
 
@@ -106,7 +105,7 @@ function refreshState() {
 }
 
 function submitViaAJAX(formId) {
-	var formData = collectFormData($("#"+formId+" input"))
+	var formData = collectFormData($("#" + formId + " input"))
 	$.ajax({
 		method : 'POST',
 		processData : false,

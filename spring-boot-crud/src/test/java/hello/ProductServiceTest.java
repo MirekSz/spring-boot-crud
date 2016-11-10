@@ -1,11 +1,9 @@
 package hello;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
-import hello.model.Product;
-import hello.repo.ProductRepo;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -18,6 +16,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+
+import hello.model.Product;
+import hello.repo.ProductRepo;
+import hello.service.ProductChangeEvent;
+import hello.service.ProductService;
 
 public class ProductServiceTest extends BaseTest {
 	@Inject
@@ -38,7 +41,7 @@ public class ProductServiceTest extends BaseTest {
 
 		// then
 		assertThat(productRepo.count()).isGreaterThan(initialCount);
-		verify(simpMessagingTemplate).convertAndSend(anyString(), eq(true));
+		verify(simpMessagingTemplate).convertAndSend(anyString(), any(ProductChangeEvent.class));
 	}
 
 	@Test
