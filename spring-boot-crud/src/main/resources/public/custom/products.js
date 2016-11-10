@@ -144,6 +144,7 @@ var new_conn = function() {
 		login : 'mirek'
 	}, function(frame) {
 		console.log('Connected: ' + frame);
+		refreshState();
 		stompClient.subscribe('/topic/products-change', function(greeting) {
 			refreshState()
 		});
@@ -151,15 +152,17 @@ var new_conn = function() {
 			console.log(greeting)
 		});
 	}, function() {
-		console.log(arguments)
+		isLogged();
 		setTimeout(function() {
 			new_conn();
-			refreshState();
 		}, 5000);
 	});
 };
 new_conn();
-
+function isLogged(){
+	$.get('/altkom/', function(data) {
+	});
+}
 setTimeout(function() {
 	stompClient.send("/altkom/topic/hello", {}, JSON.stringify({
 		'name' : 'mirek'
