@@ -1,3 +1,18 @@
+var token = $("meta[name='_csrf']").attr("content");
+var header = $("meta[name='_csrf_header']").attr("content");
+
+var _ctx = $("meta[name='ctx']").attr("content");
+
+$(document).ajaxSend(function(e, xhr, options) {
+	xhr.setRequestHeader(header, token);
+});
+
+$(document).ajaxError(function(data, status, xhr) {
+	if (status.status === 403) {
+		location.reload();
+	}
+});
+
 $(document)
 		.ready(
 				function() {
@@ -51,7 +66,7 @@ $(document)
 												return {
 													results : data.items,
 													pagination : {
-														more : (params.page * 10) < data.total_count
+														more : (params.page * 2) < data.total_count
 													}
 												};
 											},
@@ -101,7 +116,7 @@ function addTag() {
 function refreshState() {
 	$.get('/altkom/greeting', function(data) {
 		$("ul").html(data)
-	})
+	});
 }
 
 function submitViaAJAX(formId) {
@@ -136,6 +151,7 @@ var new_conn = function() {
 			console.log(greeting)
 		});
 	}, function() {
+		console.log(arguments)
 		setTimeout(function() {
 			new_conn();
 			refreshState();

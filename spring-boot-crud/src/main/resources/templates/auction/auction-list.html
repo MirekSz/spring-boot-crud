@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html layout:decorator="layout/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<body>
+<div th:inline="text"></div>
+	<div class="container" layout:fragment="content">
+		<div class="alert alert-success" role="alert" th:if="${added}">
+			<span class="glyphicon 	glyphicon glyphicon-ok" aria-hidden="true"></span>
+			Dodano aukcje
+		</div>
+		<span th:text="${{demo}}">oo</span> <a href="add" th:href="@{/auctions/add}"
+			class="btn btn-success pull-right"> <i class=" glyphicon glyphicon-plus"></i>
+			Add new auction
+		</a>
+		<table class="table table-striped table-hover ">
+			<thead>
+				<tr>
+					<th>Number</th>
+					<th>Name</th>
+					<th>Min price</th>
+					<th>Expire date</th>
+					<th>Winer</th>
+					<th style="width: 10%">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="auction : ${auctions}">
+					<td th:text="${auction.id}"></td>
+					<td th:text="${auction.name}"></td>
+					<td th:text="${auction.minPrice}"></td>
+					<td th:text="${{auction.expireDate}}"></td>
+					<td
+						th:text="${auction.currentPrice!=null}?${auction.currentPrice} +''+ (${auction.currentPrice})"></td>
+					<td><a href="#"
+						th:href="@{/auctions/{id}/edit(id=${auction.id})}"><span
+							class="glyphicon glyphicon-pencil"></span></a> <a href="#"
+						th:href="@{/auctions/{id}/delete(id=${auction.id})}"><span
+							class="glyphicon glyphicon-remove"></span></a></td>
+				</tr>
+			</tbody>
+		</table>
+		<div id="details"></div>
+	</div>
+</body>
+</html>

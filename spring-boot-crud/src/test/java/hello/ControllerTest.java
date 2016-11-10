@@ -3,6 +3,9 @@ package hello;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import hello.ViewController.Person;
+import hello.model.Product;
+import hello.repo.ProductRepo;
 
 import java.math.BigDecimal;
 
@@ -19,10 +22,6 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import hello.ViewController.Person;
-import hello.model.Product;
-import hello.repo.ProductRepo;
 
 public class ControllerTest extends BaseTest {
 	private MockMvc mvc;
@@ -53,8 +52,8 @@ public class ControllerTest extends BaseTest {
 		controller.persons.add(person);
 
 		// when
-		String contentAsString = mvc.perform(get("/greeting")).andExpect(status().isOk()).andReturn().getResponse()
-				.getContentAsString();
+		String contentAsString = mvc.perform(get("/greeting").with(csrf())).andExpect(status().isOk()).andReturn()
+				.getResponse().getContentAsString();
 
 		// then
 		assertThat(contentAsString).contains("Stefan");

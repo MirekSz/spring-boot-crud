@@ -4,6 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
+import hello.model.Product;
+import hello.repo.ProductRepo;
+import hello.service.ProductChangeEvent;
+import hello.service.ProductService;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,11 +20,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-
-import hello.model.Product;
-import hello.repo.ProductRepo;
-import hello.service.ProductChangeEvent;
-import hello.service.ProductService;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 public class ProductServiceTest extends BaseTest {
 	@Inject
@@ -46,6 +47,8 @@ public class ProductServiceTest extends BaseTest {
 
 	@Test
 	public void shouldFindProductsWIthCustomQuery() {
+		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken("mirek", "mirek");
+		SecurityContextHolder.getContext().setAuthentication(authentication);
 		// given
 		productRepo.save(new Product("Rower", "", 10, BigDecimal.TEN));
 		productRepo.save(new Product("romet", "", 10, BigDecimal.TEN));

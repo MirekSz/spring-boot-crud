@@ -1,11 +1,26 @@
 <!DOCTYPE HTML>
 <head th:fragment="header" xmlns:th="http://www.thymeleaf.org">
 <meta charset="UTF-8" />
-<link href="/assets/css/bootstrap.css" rel="stylesheet" />
-<link href="/assets/css/style.css" rel="stylesheet" />
-<link href="/assets/css/font-awesome.min.css" rel="stylesheet" />
-<script type="text/javascript" src="/assets/js/jquery-2.2.4.js"></script>
-<script type="text/javascript" src="/assets/auctions.js"></script>
+<link th:href="@{/assets/css/bootstrap.css}" rel="stylesheet" />
+<link th:href="@{/assets/css/style.css}" rel="stylesheet" />
+<link th:href="@{/assets/css/font-awesome.min.css}" rel="stylesheet" />
+<link th:href="@{/assets/css/nprogress.css}" rel="stylesheet" />
+<script type="text/javascript" th:src="@{/assets/js/jquery-2.2.4.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/nprogress.js}"></script>
+<script type="text/javascript" th:src="@{/assets/auctions.js}"></script>
+<script>
+	NProgress.configure({
+		easing : 'ease',
+		speed : 1000
+	});
+	$(document).ajaxStart(function() {
+		NProgress.start();
+	});
+	$(document).ajaxStop(function() {
+		NProgress.done();
+	});
+</script>
 </head>
 <div th:fragment="menu" xmlns:th="http://www.thymeleaf.org">
 	<!-- Fixed navbar -->
@@ -18,20 +33,46 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="/"><i>Super - Auctions</i></a>
+				<!--		<a class="navbar-brand" href="/"><i><span style="font-size:24px"><span style="color:red">ALT</span>KOM</span> training app</i></a>-->
 			</div>
 			<div class="navbar-collapse collapse navbar-right">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="/">HOME</a></li>
-					<li><a href="about.html">ABOUT</a></li>
-					<li><a href="contact.html">CONTACT</a></li>
-					<li><a href="" th:href="@{/auctions/add}">ADD</a></li>
+					<li class="active"><a th:href="@{/}"><span class="glyphicon glyphicon-home"/> HOME</a></li>
+					<li><a th:href="@{/greeting}">ABOUT</a></li>
+					<li><a th:href="@{/contact}">CONTACT</a></li>
+					<li><a href="#" onClick="$('#logoutForm').submit();return false;"><span class="glyphicon glyphicon-off"/> LOGOUT</a></li>
 				</ul>
+				<form th:action="@{/logout}" method="post" style="display: none"
+					id="logoutForm">
+					<input type="submit" value="Log out" id="logout" /> 
+				</form>
 			</div>
 			<!--/.nav-collapse -->
 		</div>
 	</div>
 	<br /> <br /> <br /> <br />
+</div>
+
+<div th:fragment="field(label,name)" xmlns:th="http://www.thymeleaf.org"
+	class="form-group"
+	th:classappend="${#fields.hasErrors('*{__${name}__}')}? 'has-error'">
+	<!-- fragments/field -->
+	<label class="control-label" th:text="${label}">name </label>
+	<div class="controls">
+		<input th:field="*{__${name}__}" th:errorclass="error"
+			th:name="${name}" value="Jan" th:value="*{__${name}__}"
+			class="form-control" /> <span class="help-block"
+			th:if="${#fields.hasErrors('*{__${name}__}')}"
+			th:errors="*{__${name}__}"></span>
+	</div>
+
+</div>
+<div th:fragment="imgField" xmlns:th="http://www.thymeleaf.org">
+	<div class="form-group">
+		<!-- fragments/imgfield -->
+		<label class="control-label" th:text="${label}">name</label> <input
+			th:name="${name}" value="Jan" type="file" accept=".png,.jpg"/>
+	</div>
 </div>
 
 <div id="footerwrap" th:fragment="footer"
@@ -68,28 +109,3 @@
 		</div>
 	</div>
 </div>
-
-<div th:fragment="field(label,name)" xmlns:th="http://www.thymeleaf.org"
-	class="form-group"
-	th:classappend="${#fields.hasErrors('*{__${name}__}')}? 'has-error'">
-	<!-- fragments/field -->
-	<label class="control-label" th:text="${label}">name </label>
-	<div class="controls">
-		<input th:field="*{__${name}__}" th:errorclass="error"
-			th:name="${name}" value="Jan" th:value="*{__${name}__}"
-			class="form-control" /> <span class="help-block"
-			th:if="${#fields.hasErrors('*{__${name}__}')}"
-			th:errors="*{__${name}__}"></span>
-	</div>
-
-</div>
-<div th:fragment="imgField" xmlns:th="http://www.thymeleaf.org">
-	<div class="form-group">
-		<!-- fragments/imgfield -->
-		<label class="control-label" th:text="${label}">name</label> <input
-			th:name="${name}" value="Jan" type="file" accept=".png,.jpg"/>
-	</div>
-</div>
-
-
-
