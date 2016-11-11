@@ -9,19 +9,30 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.Ordered;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.view.BeanNameViewResolver;
 
 @Configuration
+@EnableWebMvc
 public class StaticResourceConfiguration extends WebMvcConfigurerAdapter {
 
 	private static final String[] CLASSPATH_RESOURCE_LOCATIONS = { "classpath:/META-INF/resources/",
 			"classpath:/resources/", "classpath:/static/", "classpath:/public/" };
+
+	@Bean
+	public BeanNameViewResolver beanNameViewResolver() {
+		BeanNameViewResolver resolver = new BeanNameViewResolver();
+		resolver.setOrder(Ordered.LOWEST_PRECEDENCE - 10);
+		return resolver;
+	}
 
 	@Bean
 	public FilterRegistrationBean filterRegistrationBeanEncoding() {
