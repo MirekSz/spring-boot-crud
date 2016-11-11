@@ -6,7 +6,6 @@ var _ctx = $("meta[name='ctx']").attr("content");
 $(document).ajaxSend(function(e, xhr, options) {
 	xhr.setRequestHeader(header, token);
 });
-
 $(document).ajaxError(function(data, status, xhr) {
 	if (status.status === 403) {
 		location.reload();
@@ -155,7 +154,7 @@ var new_conn = function() {
 		isLogged();
 		setTimeout(function() {
 			new_conn();
-		}, 5000);
+		}, 10000);
 	});
 };
 new_conn();

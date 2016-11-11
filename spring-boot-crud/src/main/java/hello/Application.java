@@ -8,6 +8,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 public class Application {
 
 	public static void main(String[] args) {
+		org.apache.ibatis.logging.LogFactory.useLog4JLogging();
 		ConfigurableApplicationContext run = SpringApplication.run(Application.class, args);
 		String[] registeredScopeNames = run.getBeanFactory().getRegisteredScopeNames();
 		for (String string : registeredScopeNames) {

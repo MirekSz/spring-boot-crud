@@ -1,5 +1,6 @@
 package hello.www;
 
+import hello.mrepo.AuctionMRepo;
 import hello.repo.Auction;
 import hello.repo.AuctionRepo;
 
@@ -34,6 +35,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AuctionsController {
 	@Autowired
 	AuctionRepo repo;
+	@Autowired
+	AuctionMRepo mrepo;
 
 	@Autowired
 	DummyProductService productService;
@@ -52,6 +55,10 @@ public class AuctionsController {
 	@RequestMapping
 	@PreAuthorize("@logger.go(authentication)")
 	public String list(Model model) {
+		List<Auction> findAll = mrepo.findAll();
+		findAll = mrepo.findAll();
+		Auction findById = mrepo.findById(1L);
+		findById = mrepo.findById(1L);
 		List<Auction> allForCurrentUser = repo.getAllForCurrentUser();
 		System.out.println("allForCurrentUser " + allForCurrentUser.size());
 		Auction findOne = repo.findOne(repo.findAll().get(0).getId());

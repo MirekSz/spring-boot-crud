@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.Order;
 import org.springframework.data.repository.query.spi.EvaluationContextExtension;
 import org.springframework.data.repository.query.spi.EvaluationContextExtensionSupport;
 import org.springframework.security.access.event.AuthorizationFailureEvent;
@@ -22,7 +21,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
-@Order(100)
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -37,9 +35,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		// http.addFilterBefore(filter,
 		// UsernamePasswordAuthenticationFilter.class);
-		http.authorizeRequests().antMatchers("/assets/**", "/login**", "/logout**").permitAll().anyRequest()
-				.authenticated().and().formLogin().loginPage("/login").and().logout().logoutUrl("/logout").and()
-				.rememberMe().and().csrf().csrfTokenRepository(csrfTokenRepository()).and().exceptionHandling()
+		http.authorizeRequests().antMatchers("/assets/**", "/login**", "/logout**", "/services/**").permitAll()
+				.anyRequest().authenticated().and().formLogin().loginPage("/login").and().logout().logoutUrl("/logout")
+				.and().rememberMe().and().csrf().csrfTokenRepository(csrfTokenRepository()).and().exceptionHandling()
 				.authenticationEntryPoint(new AjaxAwareAuthenticationEntryPoint("/login"));
 		;
 		http.headers().frameOptions().disable();
