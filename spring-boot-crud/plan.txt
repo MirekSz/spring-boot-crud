@@ -1,0 +1,14 @@
+RedirectAttrubites if
+obsluga wyjatko controller advice
+
+* REST i Swagger
+* Spring Boot
+* Spring Security
+* CXF
+* Thymelaft
+* Jobs, Asynch
+* Websockets
+* Spring Data
+* Spring Testing
+* monitoring
+emma

@@ -1,5 +1,8 @@
 package hello.service;
 
+import hello.model.Product;
+import hello.repo.ProductRepo;
+
 import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.Future;
@@ -11,9 +14,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
-
-import hello.model.Product;
-import hello.repo.ProductRepo;
 
 @Service
 public class ProductService {
@@ -42,7 +42,7 @@ public class ProductService {
 	public Future<Long> veryReportGeneration(boolean thorwException) {
 		counterService.increment("report.gen");
 		if (thorwException) {
-			throw new NullPointerException("Ehh");
+			// throw new NullPointerException("Ehh");
 		}
 		try {
 			Thread.sleep(10000);

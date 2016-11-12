@@ -14,6 +14,7 @@ import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
+//dziala ale zakomentuj wszystko
 @Configuration
 @EnableAsync
 public class AsynchConfig implements AsyncConfigurer {

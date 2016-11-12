@@ -1,5 +1,6 @@
 shell cf = context.getAttributes()['spring.beanfactory']
 
+profile
 CXF
 jobs
 asynch
@@ -21,3 +22,4 @@ JENKINS
 file
 websocket
 camel
+monitoring

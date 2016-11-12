@@ -104,14 +104,14 @@ public class ViewController {
 		Future<Long> rep1 = productService.veryReportGeneration(false);
 		Future<Long> rep2 = productService.veryReportGeneration(true);
 		Future<Long> rep3 = productService.veryReportGeneration(false);
-		// while (!rep1.isDone() || !rep2.isDone() || !rep3.isDone()) {
-		// try {
-		// Thread.sleep(100);
-		// } catch (InterruptedException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// }
+		while (!rep1.isDone() || !rep2.isDone() || !rep3.isDone()) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		System.out.println("ALL DONE");
 		person.phone = resources[persons.size()].getFilename();
 		persons.add(0, person);
