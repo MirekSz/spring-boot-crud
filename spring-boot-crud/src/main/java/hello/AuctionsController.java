@@ -1,8 +1,9 @@
-package hello.www;
+package hello;
 
 import hello.mrepo.AuctionMRepo;
 import hello.repo.Auction;
 import hello.repo.AuctionRepo;
+import hello.www.DummyProductService;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -17,7 +18,6 @@ import javax.validation.Validator;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -47,13 +47,12 @@ public class AuctionsController {
 	}
 
 	@PostConstruct
-	public void init() {
+	public void addData() {
 		repo.save(new Auction(1L, "Dysk SSD", "Dysk SSD", BigDecimal.TEN));
 		repo.save(new Auction(2L, "DDR 16GB", "DDR 16GB", BigDecimal.TEN));
 	}
 
 	@RequestMapping
-	@PreAuthorize("@logger.go(authentication)")
 	public String list(Model model) {
 		List<Auction> findAll = mrepo.findAll();
 		findAll = mrepo.findAll();
