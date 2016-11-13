@@ -10,5 +10,5 @@ obsluga wyjatko controller advice
 * Websockets
 * Spring Data
 * Spring Testing
-* monitoring
+* monitoring jprofiler
 emma

@@ -49,7 +49,7 @@ public class ControllerTest extends BaseTest {
 		// given
 		Person person = new Person();
 		person.setName("Stefan");
-		controller.persons.add(person);
+		controller.provideList().add(person);
 
 		// when
 		String contentAsString = mvc.perform(get("/greeting").with(csrf())).andExpect(status().isOk()).andReturn()
