@@ -15,7 +15,21 @@
 <script type="text/javascript" src="assets/js/sockjs.js"></script>
 <script type="text/javascript" src="assets/select/js/select2.full.js"></script>
 <script type="text/javascript" src="custom/products.js"></script>
+<link th:href="@{/assets/css/nprogress.css}" rel="stylesheet" />
+<script type="text/javascript" th:src="@{/assets/js/nprogress.js}"></script>
 </head>
+<script>
+	NProgress.configure({
+		easing : 'ease',
+		speed : 1000
+	});
+	$(document).ajaxStart(function() {
+		NProgress.start();
+	});
+	$(document).ajaxStop(function() {
+		NProgress.done();
+	});
+</script>
 <body>
 	<br />
 	<div class="container">

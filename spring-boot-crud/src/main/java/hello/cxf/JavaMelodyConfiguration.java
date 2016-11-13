@@ -11,14 +11,13 @@ import net.bull.javamelody.MonitoringFilter;
 import net.bull.javamelody.MonitoringSpringAdvisor;
 import net.bull.javamelody.Parameter;
 import net.bull.javamelody.SessionListener;
-import net.bull.javamelody.SpringDataSourceBeanPostProcessor;
 
-import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.aop.support.annotation.AnnotationMatchingPointcut;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -29,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Configuration
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @Profile(Profiles.NOT_TEST)
+@ImportResource("classpath:net/bull/javamelody/monitoring-spring-aspectj.xml")
 public class JavaMelodyConfiguration implements ServletContextInitializer {
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
@@ -60,18 +60,21 @@ public class JavaMelodyConfiguration implements ServletContextInitializer {
 		return javaMelody;
 	}
 
-	@Bean
-	public DefaultAdvisorAutoProxyCreator getDefaultAdvisorAutoProxyCreator() {
-		return new DefaultAdvisorAutoProxyCreator();
-	}
-
-	// monitoring of jdbc datasources:
-	@Bean
-	public SpringDataSourceBeanPostProcessor monitoringDataSourceBeanPostProcessor() {
-		final SpringDataSourceBeanPostProcessor processor = new SpringDataSourceBeanPostProcessor();
-		processor.setExcludedDatasources(null);
-		return processor;
-	}
+	// @Bean
+	// public DefaultAdvisorAutoProxyCreator getDefaultAdvisorAutoProxyCreator()
+	// {
+	// return new DefaultAdvisorAutoProxyCreator();
+	// }
+	//
+	// // monitoring of jdbc datasources:
+	// @Bean
+	// public SpringDataSourceBeanPostProcessor
+	// monitoringDataSourceBeanPostProcessor() {
+	// final SpringDataSourceBeanPostProcessor processor = new
+	// SpringDataSourceBeanPostProcessor();
+	// processor.setExcludedDatasources(null);
+	// return processor;
+	// }
 
 	// monitoring of beans or methods having @MonitoredWithSpring:
 	@Bean

@@ -3,6 +3,7 @@ package hello;
 import hello.mrepo.AuctionMRepo;
 import hello.repo.Auction;
 import hello.repo.AuctionRepo;
+import hello.service.SaleDocumentService;
 import hello.www.DummyProductService;
 
 import java.io.File;
@@ -40,6 +41,8 @@ public class AuctionsController {
 
 	@Autowired
 	DummyProductService productService;
+	@Autowired
+	SaleDocumentService service;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -54,6 +57,7 @@ public class AuctionsController {
 
 	@RequestMapping
 	public String list(Model model) {
+		System.out.println("service " + service.getClass());
 		List<Auction> findAll = mrepo.findAll();
 		findAll = mrepo.findAll();
 		Auction findById = mrepo.findById(1L);
