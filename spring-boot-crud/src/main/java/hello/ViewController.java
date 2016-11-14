@@ -20,11 +20,13 @@ import javax.ws.rs.core.HttpHeaders;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.authentication.event.AbstractAuthenticationEvent;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -37,6 +39,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
+// @CrossOrigin()
 public class ViewController {
 	@Inject
 	ProductService productService;
@@ -56,6 +59,11 @@ public class ViewController {
 	@MessageMapping("/topic/hello")
 	public void greeting(Map<String, Object> message) throws Exception {
 		webSocket.convertAndSend("/queue/mirek/priv", "Witam " + message.get("name"));
+	}
+
+	@EventListener
+	public void yo(AbstractAuthenticationEvent event) {
+		System.out.println(event);
 	}
 
 	@PostConstruct

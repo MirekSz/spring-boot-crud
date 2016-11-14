@@ -27,8 +27,8 @@
 	<br /> <br /> <br /> <br />
 <div class="container">
 <form class="form-signin" action="login" method="POST">
-			<input type="hidden" th:name="${_csrf.parameterName}"
-				th:value="${_csrf.token}" />
+			<input type="hidden" th:name="${_csrf}?${_csrf.parameterName}"
+				th:value="${_csrf}?${_csrf.token}" />
 	<div class="alert alert-danger" role="alert" th:if="${param.error}">
 		<span class="glyphicon 	glyphicon glyphicon-flash" aria-hidden="true"></span>
 		<strong>Invalid user or password</strong>
