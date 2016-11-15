@@ -89,8 +89,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			public UserDetails loadUserByUsername(String arg0) throws UsernameNotFoundException {
 				return new SystemUser();
 			}
-		});
-		// auth.inMemoryAuthentication().withUser("mirek").password("mirek").roles("USER");
+		});// .passwordEncoder(new BCryptPasswordEncoder());
+			// auth.inMemoryAuthentication().withUser("mirek").password("mirek").roles("USER");
 
 	}
 

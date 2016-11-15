@@ -21,7 +21,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class Auction implements Serializable {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	@NotNull
 	private String name;
@@ -42,6 +42,8 @@ public class Auction implements Serializable {
 	private String creator;
 	@LastModifiedBy
 	private String modifier;
+
+	private Boolean active;
 
 	public Auction(Long id, String name, String description, BigDecimal minPrice) {
 		this.id = id;
@@ -139,6 +141,14 @@ public class Auction implements Serializable {
 
 	public void setModifier(String modifier) {
 		this.modifier = modifier;
+	}
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 
 }

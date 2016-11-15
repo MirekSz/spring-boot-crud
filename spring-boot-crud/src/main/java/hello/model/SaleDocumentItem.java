@@ -9,7 +9,7 @@ import javax.persistence.ManyToOne;
 @Entity
 public class SaleDocumentItem {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	private Integer lp;
 	@ManyToOne

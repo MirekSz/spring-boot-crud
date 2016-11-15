@@ -14,4 +14,6 @@ public interface AuctionRepo extends JpaRepository<Auction, Long> {
 	@Override
 	// @Yours
 	Auction findOne(Long id);
+
+	List<Auction> findTop10ByActiveIsTrue();
 }

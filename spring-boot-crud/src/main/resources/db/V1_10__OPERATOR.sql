@@ -1,0 +1,2 @@
+create table auction (id bigint not null, created_date timestamp, creator varchar(255), current_price decimal(19,2), current_winer varchar(255), description varchar(255) not null, expire_date timestamp, last_modified_date timestamp, min_price decimal(19,2) not null, modifier varchar(255), name varchar(255) not null, owner varchar(255), primary key (id))
+create table product (id bigint not null, description varchar(255), name varchar(255), price decimal(19,2), quantity integer, primary key (id))
