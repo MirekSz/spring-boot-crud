@@ -12,3 +12,5 @@ obsluga wyjatko controller advice
 * Spring Testing
 * monitoring jprofiler
 emma
+
+http://sivalabs.in/2012/10/mybatis-tutorial-part-3-mapping-relationships/
