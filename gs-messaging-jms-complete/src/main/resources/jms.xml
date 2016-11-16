@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jms="http://www.springframework.org/schema/jms"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms-4.3.xsd">
+
+	<bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<property name="brokerURL" value="tcp://localhost:61616" />
+	</bean>
+
+	<bean id="myTopic" class="org.apache.activemq.command.ActiveMQTopic">
+		<constructor-arg value="to" />
+	</bean>
+
+	<bean id="myQueue" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="qu" />
+	</bean>
+
+	<bean id="topicListener" class="hello.TopicConsumer" />
+	<bean id="ququeListener" class="hello.QueueConsumer" />
+	
+	<bean id="topicDurableListenerC"
+		class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<!-- never use concurrentConsumers with topics ! -->
+		<property name="concurrentConsumers" value="1" />
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="destination" ref="myTopic" />
+		<property name="messageListener" ref="topicListener" />
+		<property name="sessionTransacted" value="true" />
+		<!-- Specify topic style publish/subscribe -->
+		<property name="pubSubDomain" value="true" />
+		<!-- Will guaranty that we receive messages in queue after broker goes 
+			down -->
+		<property name="subscriptionDurable" value="true" />
+		<property name="clientId" value="myApp" />
+		<property name="durableSubscriptionName" value="myApp" />
+	</bean>
+	
+	<bean id="topicNotDurableListenerC"
+		class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<!-- never use concurrentConsumers with topics ! -->
+		<property name="concurrentConsumers" value="1" />
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="destination" ref="myTopic" />
+		<property name="messageListener" ref="topicListener" />
+		<property name="sessionTransacted" value="true" />
+		<!-- Specify topic style publish/subscribe -->
+		<property name="pubSubDomain" value="false" />
+		<!-- Will guaranty that we receive messages in queue after broker goes 
+			down -->
+		<property name="subscriptionDurable" value="false" />
+		<property name="clientId" value="myApp2" />
+		<property name="durableSubscriptionName" value="myApp2" />
+	</bean>
+	
+	<bean id="ququeListenerC"
+		class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<!-- never use concurrentConsumers with topics ! -->
+		<property name="concurrentConsumers" value="1" />
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="destination" ref="myQueue" />
+		<property name="messageListener" ref="ququeListener" />
+		<property name="sessionTransacted" value="true" />
+		<!-- Specify topic style publish/subscribe -->
+		<property name="pubSubDomain" value="false" />
+	</bean>
+	
+	<bean id="topicTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="messageConverter" ref="jacksonJmsMessageConverter" />
+		<!-- Value = javax.jms.DeliveryMode.PERSISTENT -->
+		<property name="deliveryMode" value="2" />
+
+		<property name="pubSubDomain" value="true" />
+
+		<!-- Value = javax.jms.Session.CLIENT_ACKNOWLEDGE -->
+		<property name="sessionAcknowledgeMode" value="2" />
+
+		<!-- Needs to be true for the deliveryMode to work -->
+		<property name="explicitQosEnabled" value="true" />
+	</bean>
+	
+	<bean id="queuecTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="messageConverter" ref="jacksonJmsMessageConverter" />
+		<!-- Value = javax.jms.DeliveryMode.PERSISTENT -->
+		<property name="deliveryMode" value="2" />
+
+		<property name="pubSubDomain" value="false" />
+
+		<!-- Value = javax.jms.Session.CLIENT_ACKNOWLEDGE -->
+		<property name="sessionAcknowledgeMode" value="2" />
+
+		<!-- Needs to be true for the deliveryMode to work -->
+		<property name="explicitQosEnabled" value="true" />
+	</bean>
+	
+</beans>
