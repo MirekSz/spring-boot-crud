@@ -12,8 +12,9 @@ public class CamelRoute extends RouteBuilder {
 	public void configure() throws Exception {
 		// onException(NullPointerException.class).handled(true).to("file:C:\\temp\\old\\failed");
 		from("jetty:http://localhost:5345").removeHeaders("*", "name").to("log:bar?showHeaders=true");
-
-		from("file:C:\\temp\\old\\2014-01-09?moveFailed=C:\\temp\\old\\failed_move").process(new Processor() {
+		from("file:C:\\temp\\old\\2014-01-09?moveFailed=C:\\temp\\old\\failed_move")
+				.to("seda:process?timeout=10000&waitForTaskToComplete=always");
+		from("seda:process").process(new Processor() {
 
 			@Override
 			public void process(Exchange arg0) throws Exception {
@@ -24,7 +25,7 @@ public class CamelRoute extends RouteBuilder {
 
 			@Override
 			public void process(Exchange arg0) throws Exception {
-				// TODO Auto-generated method stub
+				Thread.sleep(50000);
 
 			}
 		}).id("b").process(new Processor() {
