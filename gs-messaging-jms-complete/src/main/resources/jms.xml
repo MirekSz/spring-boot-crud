@@ -78,6 +78,7 @@
 
 		<!-- Needs to be true for the deliveryMode to work -->
 		<property name="explicitQosEnabled" value="true" />
+		<property name="sessionTransacted" value="true" />
 	</bean>
 	
 	<bean id="queuecTemplate" class="org.springframework.jms.core.JmsTemplate">
@@ -93,6 +94,7 @@
 
 		<!-- Needs to be true for the deliveryMode to work -->
 		<property name="explicitQosEnabled" value="true" />
+		<property name="sessionTransacted" value="true" />
 	</bean>
 	
 </beans>
