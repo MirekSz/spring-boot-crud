@@ -12,6 +12,8 @@ import net.bull.javamelody.MonitoringSpringAdvisor;
 import net.bull.javamelody.Parameter;
 import net.bull.javamelody.SessionListener;
 
+import org.springframework.aop.ClassFilter;
+import org.springframework.aop.support.annotation.AnnotationClassFilter;
 import org.springframework.aop.support.annotation.AnnotationMatchingPointcut;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
@@ -96,7 +98,21 @@ public class JavaMelodyConfiguration implements ServletContextInitializer {
 	@Bean
 	public MonitoringSpringAdvisor springControllerMonitoringAdvisor() {
 		final MonitoringSpringAdvisor interceptor = new MonitoringSpringAdvisor();
-		interceptor.setPointcut(new AnnotationMatchingPointcut(Controller.class));
+		interceptor.setPointcut(new AnnotationMatchingPointcut(Controller.class) {
+			@Override
+			public ClassFilter getClassFilter() {
+				AnnotationClassFilter annotationClassFilter = new AnnotationClassFilter(Controller.class) {
+					@Override
+					public boolean matches(Class<?> clazz) {
+						if (!clazz.getName().startsWith("hello")) {
+							return false;
+						}
+						return super.matches(clazz);
+					}
+				};
+				return annotationClassFilter;
+			}
+		});
 		return interceptor;
 	}
 
