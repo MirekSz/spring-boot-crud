@@ -58,7 +58,6 @@ public class AuctionsController {
 	@RequestMapping
 	public String list(Model model) {
 		List<Auction> findAllWhereActivesIsTrue = repo.findTop10ByActiveIsTrue();
-
 		System.out.println("service " + service.getClass());
 		List<Auction> findAll = mrepo.findAll();
 		findAll = mrepo.findAll();

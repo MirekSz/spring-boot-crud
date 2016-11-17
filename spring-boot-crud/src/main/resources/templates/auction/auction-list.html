@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html layout:decorator="layout/layout"
 	xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <body>
 <div th:inline="text"></div>
 	<div class="container" layout:fragment="content">
@@ -9,7 +10,9 @@
 			<span class="glyphicon 	glyphicon glyphicon-ok" aria-hidden="true"></span>
 			Dodano aukcje
 		</div>
-		<span th:text="${{demo}}">oo</span> <a href="add" th:href="@{/auctions/add}"
+		<span sec:authentication="principal.authorities"></span>
+		
+		<span th:text="${{demo}}">oo</span> <a sec:authorize="hasAuthority('ROLE_ADMIN')" href="add" th:href="@{/auctions/add}"
 			class="btn btn-success pull-right"> <i class=" glyphicon glyphicon-plus"></i>
 			Add new auction
 		</a>

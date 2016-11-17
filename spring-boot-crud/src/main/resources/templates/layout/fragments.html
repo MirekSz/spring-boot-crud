@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<head th:fragment="header" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="header" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <meta charset="UTF-8" />
 <link th:href="@{/assets/css/bootstrap.css}" rel="stylesheet" />
 <link th:href="@{/assets/css/style.css}" rel="stylesheet" />
@@ -22,7 +22,7 @@
 	});
 </script>
 </head>
-<div th:fragment="menu" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="menu" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 	<!-- Fixed navbar -->
 	<div class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container">
@@ -40,7 +40,7 @@
 					<li class="active"><a th:href="@{/}"><span class="glyphicon glyphicon-home"/> HOME</a></li>
 					<li><a th:href="@{/greeting}">ABOUT</a></li>
 					<li><a th:href="@{/contact}">CONTACT</a></li>
-					<li><a href="#" onClick="$('#logoutForm').submit();return false;"><span class="glyphicon glyphicon-off"/> LOGOUT</a></li>
+					<li><a href="#" onClick="$('#logoutForm').submit();return false;"><span class="glyphicon glyphicon-off" /> LOGOUT <span sec:authentication="name"></span> </a></li>
 				</ul>
 				<form th:action="@{/logout}" method="post" style="display: none"
 					id="logoutForm">

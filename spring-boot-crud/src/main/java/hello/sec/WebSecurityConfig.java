@@ -38,7 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/assets/**", "/login**", "/logout**", "/services/**").permitAll()
 				.anyRequest().authenticated().and().formLogin().loginPage("/login").and().logout().logoutUrl("/logout")
 				.and().rememberMe().and().csrf().csrfTokenRepository(csrfTokenRepository()).and().exceptionHandling()
-				.authenticationEntryPoint(new AjaxAwareAuthenticationEntryPoint("/login"));
+				.and().httpBasic().authenticationEntryPoint(new AjaxAwareAuthenticationEntryPoint("/login"));
 		;
 		http.headers().frameOptions().disable();
 

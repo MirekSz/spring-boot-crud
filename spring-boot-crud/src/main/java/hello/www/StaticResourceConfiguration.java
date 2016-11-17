@@ -19,6 +19,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.BeanNameViewResolver;
+import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 
 @Configuration
 @EnableWebMvc
@@ -32,6 +33,11 @@ public class StaticResourceConfiguration extends WebMvcConfigurerAdapter {
 		BeanNameViewResolver resolver = new BeanNameViewResolver();
 		resolver.setOrder(Ordered.LOWEST_PRECEDENCE - 10);
 		return resolver;
+	}
+
+	@Bean
+	public SpringSecurityDialect securityDialect() {
+		return new SpringSecurityDialect();
 	}
 
 	@Bean
