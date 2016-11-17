@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
@@ -37,8 +38,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// UsernamePasswordAuthenticationFilter.class);
 		http.authorizeRequests().antMatchers("/assets/**", "/login**", "/logout**", "/services/**").permitAll()
 				.anyRequest().authenticated().and().formLogin().loginPage("/login").and().logout().logoutUrl("/logout")
-				.and().rememberMe().and().csrf().csrfTokenRepository(csrfTokenRepository()).and().exceptionHandling()
-				.and().httpBasic().authenticationEntryPoint(new AjaxAwareAuthenticationEntryPoint("/login"));
+				.and().rememberMe().and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+				.and().exceptionHandling().and().httpBasic()
+				.authenticationEntryPoint(new AjaxAwareAuthenticationEntryPoint("/login"));
 		;
 		http.headers().frameOptions().disable();
 
