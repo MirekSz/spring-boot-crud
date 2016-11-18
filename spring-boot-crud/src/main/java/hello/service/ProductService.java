@@ -3,17 +3,23 @@ package hello.service;
 import hello.model.Product;
 import hello.repo.ProductRepo;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.Future;
 
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.springframework.boot.actuate.metrics.CounterService;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationAdapter;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 @Service
 public class ProductService {
@@ -38,9 +44,20 @@ public class ProductService {
 		return product.getId();
 	}
 
+	@PersistenceContext
+	EntityManager em;
+
 	@Async
+	@Transactional
 	public Future<Long> veryReportGeneration(boolean thorwException) {
+		TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
+		});
+		eventBus.publishEvent(new ProductChangeEvent());
+		Product entity = new Product("Rower", "", 10, BigDecimal.TEN);
+		repo.save(entity);
+		entity.setDescription("a");
 		counterService.increment("report.gen");
+		em.createNativeQuery("SELECT SLEEP(10);").getResultList();
 		if (thorwException) {
 			// throw new NullPointerException("Ehh");
 		}

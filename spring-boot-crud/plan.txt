@@ -1,6 +1,6 @@
 RedirectAttrubites if
 obsluga wyjatko controller advice
-
+BOM
 * REST i Swagger
 * Spring Boot
 * Spring Security

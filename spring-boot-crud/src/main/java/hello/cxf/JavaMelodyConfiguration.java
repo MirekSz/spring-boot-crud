@@ -67,6 +67,7 @@ public class JavaMelodyConfiguration implements ServletContextInitializer {
 	// {
 	// return new DefaultAdvisorAutoProxyCreator();
 	// }
+
 	//
 	// // monitoring of jdbc datasources:
 	// @Bean
@@ -91,17 +92,29 @@ public class JavaMelodyConfiguration implements ServletContextInitializer {
 	@Bean
 	public MonitoringSpringAdvisor springServiceMonitoringAdvisor() {
 		final MonitoringSpringAdvisor interceptor = new MonitoringSpringAdvisor();
-		interceptor.setPointcut(new AnnotationMatchingPointcut(Service.class));
+		interceptor.setPointcut(createAnnotationMatchingPointcut(Service.class));
 		return interceptor;
 	}
 
 	@Bean
 	public MonitoringSpringAdvisor springControllerMonitoringAdvisor() {
 		final MonitoringSpringAdvisor interceptor = new MonitoringSpringAdvisor();
-		interceptor.setPointcut(new AnnotationMatchingPointcut(Controller.class) {
+		interceptor.setPointcut(createAnnotationMatchingPointcut(Controller.class));
+		return interceptor;
+	}
+
+	@Bean
+	public MonitoringSpringAdvisor springRestControllerMonitoringAdvisor() {
+		final MonitoringSpringAdvisor interceptor = new MonitoringSpringAdvisor();
+		interceptor.setPointcut(createAnnotationMatchingPointcut(RestController.class));
+		return interceptor;
+	}
+
+	private AnnotationMatchingPointcut createAnnotationMatchingPointcut(Class annotation) {
+		return new AnnotationMatchingPointcut(annotation) {
 			@Override
 			public ClassFilter getClassFilter() {
-				AnnotationClassFilter annotationClassFilter = new AnnotationClassFilter(Controller.class) {
+				AnnotationClassFilter annotationClassFilter = new AnnotationClassFilter(annotation) {
 					@Override
 					public boolean matches(Class<?> clazz) {
 						if (!clazz.getName().startsWith("hello")) {
@@ -112,14 +125,6 @@ public class JavaMelodyConfiguration implements ServletContextInitializer {
 				};
 				return annotationClassFilter;
 			}
-		});
-		return interceptor;
-	}
-
-	@Bean
-	public MonitoringSpringAdvisor springRestControllerMonitoringAdvisor() {
-		final MonitoringSpringAdvisor interceptor = new MonitoringSpringAdvisor();
-		interceptor.setPointcut(new AnnotationMatchingPointcut(RestController.class));
-		return interceptor;
+		};
 	}
 }
