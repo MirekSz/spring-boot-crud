@@ -8,9 +8,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
 
 @Entity
+@NamedEntityGraph(name = "full", attributeNodes = {
+		@NamedAttributeNode(value = "items", subgraph = "itemWithProduct") }, subgraphs = {
+				@NamedSubgraph(name = "itemWithProduct", attributeNodes = { @NamedAttributeNode(value = "product") }) })
 public class SaleDocument {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

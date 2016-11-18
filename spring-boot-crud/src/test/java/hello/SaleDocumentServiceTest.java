@@ -1,11 +1,6 @@
 package hello;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import hello.model.Product;
-import hello.repo.ProductRepo;
-import hello.service.DocumentRequest;
-import hello.service.Item;
-import hello.service.SaleDocumentService;
 
 import java.math.BigDecimal;
 
@@ -15,11 +10,20 @@ import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
+import hello.model.Product;
+import hello.repo.ProductRepo;
+import hello.repo.SaleDocumentRepo;
+import hello.service.DocumentRequest;
+import hello.service.Item;
+import hello.service.SaleDocumentService;
+
 public class SaleDocumentServiceTest extends BaseTest {
 	@Inject
 	private SaleDocumentService service;
 	@Inject
 	ProductRepo productRepo;
+	@Inject
+	SaleDocumentRepo saleDocumentRepo;
 	@MockBean
 	SimpMessagingTemplate simpMessagingTemplate;
 
@@ -34,8 +38,19 @@ public class SaleDocumentServiceTest extends BaseTest {
 		// when
 		service.insert(documentRequest);
 
-		// then
+		// then@EntityGraph
 		assertThat(save.getQuantity()).isLessThan(BEGNING_STOCK);
 		assertThat(save.getQuantity()).isLessThan(BEGNING_STOCK);
+	}
+
+	@Test
+	public void saderFetching() {
+		// given
+		saleDocumentRepo.findAll();
+		saleDocumentRepo.findTop10ByOrderByNumberDesc();
+
+		// when
+
+		// then@EntityGraph
 	}
 }
