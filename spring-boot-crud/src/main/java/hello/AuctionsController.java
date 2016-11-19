@@ -1,5 +1,11 @@
 package hello;
 
+import hello.mrepo.AuctionMRepo;
+import hello.repo.Auction;
+import hello.repo.AuctionRepo;
+import hello.service.SaleDocumentService;
+import hello.www.DummyProductService;
+
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -25,12 +31,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import hello.mrepo.AuctionMRepo;
-import hello.repo.Auction;
-import hello.repo.AuctionRepo;
-import hello.service.SaleDocumentService;
-import hello.www.DummyProductService;
-
 @Controller
 @RequestMapping("/auctions")
 public class AuctionsController {
@@ -43,6 +43,8 @@ public class AuctionsController {
 	DummyProductService productService;
 	@Autowired
 	SaleDocumentService service;
+	@Autowired
+	UserContext userContext;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -62,6 +64,7 @@ public class AuctionsController {
 		List<Auction> findAll = mrepo.findAll();
 		findAll = mrepo.findAll();
 		Auction findById = mrepo.findById(1L);
+		userContext.put("jeden", findById);
 		findById = mrepo.findById(1L);
 		List<Auction> allForCurrentUser = repo.getAllForCurrentUser();
 		System.out.println("allForCurrentUser " + allForCurrentUser.size());
@@ -92,8 +95,8 @@ public class AuctionsController {
 			String absolutePath = file.getAbsolutePath();
 			String savePath = absolutePath + File.separator + "src" + File.separator + "main" + File.separator
 					+ "resources" + File.separator + "public" + File.separator + "phones";
-			FileUtils.copyInputStreamToFile(uploadfile.getInputStream(),
-					new File(savePath + File.separator + originalFilename));
+			FileUtils.copyInputStreamToFile(uploadfile.getInputStream(), new File(savePath + File.separator
+					+ originalFilename));
 		}
 		handle(auction, bindingResult);
 		if (bindingResult.hasErrors()) {

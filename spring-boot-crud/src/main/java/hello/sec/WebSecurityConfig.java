@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.repository.query.spi.EvaluationContextExtension;
 import org.springframework.data.repository.query.spi.EvaluationContextExtensionSupport;
 import org.springframework.security.access.event.AuthorizationFailureEvent;
@@ -41,7 +42,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and().rememberMe().and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 				.and().exceptionHandling().and().httpBasic()
 				.authenticationEntryPoint(new AjaxAwareAuthenticationEntryPoint("/login"));
-		;
 		http.headers().frameOptions().disable();
 
 		// AccessDeniedHandlerImpl deniedhandler = new
@@ -94,6 +94,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		});// .passwordEncoder(new BCryptPasswordEncoder());
 			// auth.inMemoryAuthentication().withUser("mirek").password("mirek").roles("USER");
 
+	}
+
+	@Configuration
+	@Order(1)
+	public static class ApiWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
+		@Override
+		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+			auth.inMemoryAuthentication().withUser("api").password("pass").roles("API");
+		}
+
+		@Override
+		protected void configure(HttpSecurity http) throws Exception {
+			// .hasRole("API")
+			http.authorizeRequests().antMatchers("/api/**").authenticated().and().httpBasic().and().csrf().disable();
+		}
 	}
 
 	@Bean
