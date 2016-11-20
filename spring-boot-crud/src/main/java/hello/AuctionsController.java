@@ -7,6 +7,7 @@ import hello.service.SaleDocumentService;
 import hello.www.DummyProductService;
 
 import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -28,7 +29,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -59,6 +62,14 @@ public class AuctionsController {
 
 	@RequestMapping
 	public String list(Model model) {
+		if (ssEmitter != null) {
+			try {
+				ssEmitter.send("halo");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		List<Auction> findAllWhereActivesIsTrue = repo.findTop10ByActiveIsTrue();
 		System.out.println("service " + service.getClass());
 		List<Auction> findAll = mrepo.findAll();
@@ -85,6 +96,7 @@ public class AuctionsController {
 
 	@Autowired
 	Validator validator;
+	private SseEmitter ssEmitter;
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public String add(@ModelAttribute Auction auction, BindingResult bindingResult,
@@ -106,6 +118,13 @@ public class AuctionsController {
 		repo.save(auction);
 		redirectAttributes.addFlashAttribute("added", true);
 		return "redirect:/auctions";
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/stream", method = RequestMethod.GET)
+	public SseEmitter stream() {
+		ssEmitter = new SseEmitter();
+		return ssEmitter;
 	}
 
 	public void handle(Auction auction, BindingResult bindingResult) {
