@@ -20,7 +20,7 @@ public class EventHandler {
 		em.find(Product.class, 2L).setDescription("s" + System.nanoTime());
 		System.out.println("AFTER_COMMIT");
 		if (2 > 1) {
-			throw new NullPointerException();
+			// throw new NullPointerException();
 		}
 	}
 
