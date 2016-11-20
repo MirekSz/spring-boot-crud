@@ -7,7 +7,6 @@ import hello.service.SaleDocumentService;
 import hello.www.DummyProductService;
 
 import java.io.File;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -65,7 +64,7 @@ public class AuctionsController {
 		if (ssEmitter != null) {
 			try {
 				ssEmitter.send("halo");
-			} catch (IOException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
