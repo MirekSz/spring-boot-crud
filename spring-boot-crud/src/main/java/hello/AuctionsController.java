@@ -25,6 +25,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -90,6 +91,12 @@ public class AuctionsController {
 		Auction auction = new Auction();
 		auction.setExpireDate(new Date());
 		model.addAttribute("auction", auction);
+		return "auction/auction-form";
+	}
+	
+	@RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
+	public String edit(@PathVariable("id") Long id, Model model) {
+		model.addAttribute("auction", repo.findOne(id));
 		return "auction/auction-form";
 	}
 
