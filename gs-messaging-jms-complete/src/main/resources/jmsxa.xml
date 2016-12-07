@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jms="http://www.springframework.org/schema/jms"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms-4.3.xsd">
+
+
+<bean id="connectionFactory"  
+              class="org.apache.activemq.ActiveMQXAConnectionFactory"> 
+      <property name="brokerURL" value="tcp://localhost:61616" /> 
+   </bean> 
+ 
+   <!--  
+             Configure the JMS connector;  
+             call init to register for recovery!  
+        --> 
+   <bean id="ConnectionFactory"  
+              class="com.atomikos.jms.AtomikosConnectionFactoryBean"  
+              init-method="init" destroy-method="close"> 
+      <property name="uniqueResourceName" value="amq1" /> 
+      <property name="xaConnectionFactory" ref="connectionFactory" /> 
+   </bean> 
+ 
+   <!--  
+             Construct Atomikos UserTransactionManager,  
+             needed to configure Spring  
+        --> 
+   <bean id="AtomikosTransactionManager"  
+              class="com.atomikos.icatch.jta.UserTransactionManager"  
+              init-method="init" destroy-method="close"> 
+      <!--  when close is called, should we force  
+                      transactions to terminate or not? --> 
+      <property name="forceShutdown" value="false" /> 
+   </bean> 
+ 
+   <!--  
+             Also use Atomikos UserTransactionImp,  
+             needed to configure Spring   
+        -->  
+   <bean id="AtomikosUserTransaction"  
+              class="com.atomikos.icatch.jta.UserTransactionImp"> 
+       <property name="transactionTimeout" value="300" /> 
+   </bean> 
+ 
+   <!--  
+           Configure the Spring framework to use JTA transactions from Atomikos  
+        --> 
+   <bean id="JtaTransactionManager"  
+              class="org.springframework.transaction.jta.JtaTransactionManager"> 
+      <property name="transactionManager" ref="AtomikosTransactionManager" /> 
+      <property name="userTransaction" ref="AtomikosUserTransaction" /> 
+   </bean> 
+ 
+    <!-- a class that implements javax.jms.MessageListener --> 
+   <bean id="MessageListener" class="jtatest.TextOutputMessageListener" /> 
+ 
+    <!--  
+         a kind of message listener pool that will listen to  
+         messages posted to 'requestQueue' with 3 threads,  
+         each one consuming a connection from bean 'ConnectionFactory'  
+    --> 
+    <bean id="MessageListenerContainer" 
+          class="org.springframework.jms.listener.DefaultMessageListenerContainer"> 
+        <property name="transactionManager" ref="JtaTransactionManager" /> 
+        <property name="connectionFactory" ref="ConnectionFactory" /> 
+        <property name="messageListener" ref="MessageListener" /> 
+        <property name="destinationName" value="requestQueue" /> 
+        <property name="concurrentConsumers" value="1" /> 
+        <property name="receiveTimeout" value="3000" /> 
+        <property name="sessionTransacted" value="true"/> 
+    </bean>
+    
+    
+    
+    <!-- KLIENT -->
+    
+ 
+    <!--  
+         The Atomikos JTA-enabled TopicConnectionFactory,  
+         configured with the vendor's XA factory.  
+    --> 
+    <bean id="topicConnectionFactoryBean"  
+          class="com.atomikos.jms.AtomikosConnectionFactoryBean"  
+          init-method="init" destroy-method="close"> 
+        <!--  
+             The unique resource name needed for recovery  
+             by the Atomikos core.  
+        --> 
+        <property name="uniqueResourceName"> 
+            <value>TOPIC_BROKER</value> 
+        </property> 
+        <property name="xaConnectionFactory"> 
+            <ref bean="xaFactory"/> 
+        </property> 
+    </bean> 
+ 
+    <!--  
+      JMS template for easy sending of timetable update messages with Spring  
+    --> 
+    <bean id="jmsTemplate"  
+          class="org.springframework.jms.core.JmsTemplate"> 
+        <property name="connectionFactory"> 
+            <ref bean="topicConnectionFactoryBean"/> 
+        </property> 
+        <property name="receiveTimeout" value="1000"/> 
+   <property name="sessionTransacted" value="true"/> 
+    </bean>
+    
+    
+	<bean id="myTopic" class="org.apache.activemq.command.ActiveMQTopic">
+		<constructor-arg value="to" />
+	</bean>
+
+	<bean id="myQueue" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="qu" />
+	</bean>
+
+	<bean id="topicListener" class="hello.TopicConsumer" />
+	<bean id="ququeListener" class="hello.QueueConsumer" />
+	
+	<bean id="topicDurableListenerC"
+		class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<!-- never use concurrentConsumers with topics ! -->
+		<property name="concurrentConsumers" value="1" />
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="destination" ref="myTopic" />
+		<property name="messageListener" ref="topicListener" />
+		<property name="sessionTransacted" value="true" />
+		<!-- Specify topic style publish/subscribe -->
+		<property name="pubSubDomain" value="true" />
+		<!-- Will guaranty that we receive messages in queue after broker goes 
+			down -->
+		<property name="subscriptionDurable" value="true" />
+		<property name="clientId" value="myApp" />
+		<property name="durableSubscriptionName" value="myApp" />
+	</bean>
+	
+	<bean id="topicNotDurableListenerC"
+		class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<!-- never use concurrentConsumers with topics ! -->
+		<property name="concurrentConsumers" value="1" />
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="destination" ref="myTopic" />
+		<property name="messageListener" ref="topicListener" />
+		<property name="sessionTransacted" value="true" />
+		<!-- Specify topic style publish/subscribe -->
+		<property name="pubSubDomain" value="false" />
+		<!-- Will guaranty that we receive messages in queue after broker goes 
+			down -->
+		<property name="subscriptionDurable" value="false" />
+		<property name="clientId" value="myApp2" />
+		<property name="durableSubscriptionName" value="myApp2" />
+	</bean>
+	
+	<bean id="ququeListenerC"
+		class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<!-- never use concurrentConsumers with topics ! -->
+		<property name="concurrentConsumers" value="1" />
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="destination" ref="myQueue" />
+		<property name="messageListener" ref="ququeListener" />
+		<property name="sessionTransacted" value="true" />
+		<!-- Specify topic style publish/subscribe -->
+		<property name="pubSubDomain" value="false" />
+	</bean>
+	
+	<bean id="topicTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="messageConverter" ref="jacksonJmsMessageConverter" />
+		<!-- Value = javax.jms.DeliveryMode.PERSISTENT -->
+		<property name="deliveryMode" value="2" />
+
+		<property name="pubSubDomain" value="true" />
+
+		<!-- Value = javax.jms.Session.CLIENT_ACKNOWLEDGE -->
+		<property name="sessionAcknowledgeMode" value="2" />
+
+		<!-- Needs to be true for the deliveryMode to work -->
+		<property name="explicitQosEnabled" value="true" />
+		<property name="sessionTransacted" value="true" />
+	</bean>
+	
+	<bean id="queuecTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="messageConverter" ref="jacksonJmsMessageConverter" />
+		<!-- Value = javax.jms.DeliveryMode.PERSISTENT -->
+		<property name="deliveryMode" value="2" />
+
+		<property name="pubSubDomain" value="false" />
+
+		<!-- Value = javax.jms.Session.CLIENT_ACKNOWLEDGE -->
+		<property name="sessionAcknowledgeMode" value="2" />
+
+		<!-- Needs to be true for the deliveryMode to work -->
+		<property name="explicitQosEnabled" value="true" />
+		<property name="sessionTransacted" value="true" />
+	</bean>
+	
+</beans>
