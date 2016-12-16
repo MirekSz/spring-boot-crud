@@ -1,11 +1,5 @@
 package hello;
 
-import hello.mrepo.AuctionMRepo;
-import hello.repo.Auction;
-import hello.repo.AuctionRepo;
-import hello.service.SaleDocumentService;
-import hello.www.DummyProductService;
-
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -33,6 +27,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import hello.mrepo.AuctionMRepo;
+import hello.repo.Auction;
+import hello.repo.AuctionRepo;
+import hello.service.SaleDocumentService;
+import hello.www.DummyProductService;
 
 @Controller
 @RequestMapping("/auctions")
@@ -62,14 +62,6 @@ public class AuctionsController {
 
 	@RequestMapping
 	public String list(Model model) {
-		if (ssEmitter != null) {
-			try {
-				ssEmitter.send("halo");
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 		List<Auction> findAllWhereActivesIsTrue = repo.findTop10ByActiveIsTrue();
 		System.out.println("service " + service.getClass());
 		List<Auction> findAll = mrepo.findAll();
@@ -88,12 +80,21 @@ public class AuctionsController {
 
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public String add(Model model) {
+		if (ssEmitter != null) {
+			try {
+				ssEmitter.send("creating new auction");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
 		Auction auction = new Auction();
 		auction.setExpireDate(new Date());
 		model.addAttribute("auction", auction);
 		return "auction/auction-form";
 	}
-	
+
 	@RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
 	public String edit(@PathVariable("id") Long id, Model model) {
 		model.addAttribute("auction", repo.findOne(id));
@@ -113,8 +114,8 @@ public class AuctionsController {
 			String absolutePath = file.getAbsolutePath();
 			String savePath = absolutePath + File.separator + "src" + File.separator + "main" + File.separator
 					+ "resources" + File.separator + "public" + File.separator + "phones";
-			FileUtils.copyInputStreamToFile(uploadfile.getInputStream(), new File(savePath + File.separator
-					+ originalFilename));
+			FileUtils.copyInputStreamToFile(uploadfile.getInputStream(),
+					new File(savePath + File.separator + originalFilename));
 		}
 		handle(auction, bindingResult);
 		if (bindingResult.hasErrors()) {

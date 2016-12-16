@@ -19,10 +19,11 @@ $(document).ready(function() {
 			});
 		});
 	})
-
-//	var source = new EventSource(_ctx+'/auctions/stream');
-//	source.onmessage = function(event) {
-//		console.log(event)
-//	}
+	if (window.location.href.endsWith('/auctions')) {
+		var source = new EventSource(_ctx + '/auctions/stream');
+		source.onmessage = function(event) {
+			console.log(event)
+		}
+	}
 })
 // thymelaft javascript
