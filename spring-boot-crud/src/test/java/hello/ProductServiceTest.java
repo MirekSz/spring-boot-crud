@@ -4,24 +4,28 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
-import hello.model.Product;
-import hello.repo.ProductRepo;
-import hello.service.ProductChangeEvent;
-import hello.service.ProductService;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
+import org.awaitility.Awaitility;
 import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import hello.model.Product;
+import hello.repo.ProductRepo;
+import hello.service.ProductChangeEvent;
+import hello.service.ProductService;
 
 public class ProductServiceTest extends BaseTest {
 	@Inject
@@ -30,6 +34,8 @@ public class ProductServiceTest extends BaseTest {
 	ProductRepo productRepo;
 	@MockBean
 	SimpMessagingTemplate simpMessagingTemplate;
+	@Inject
+	ApplicationEventPublisher eventBus;
 
 	@Test
 	public void shouldAddProductAndInformByWebSocket() {
@@ -43,6 +49,18 @@ public class ProductServiceTest extends BaseTest {
 		// then
 		assertThat(productRepo.count()).isGreaterThan(initialCount);
 		verify(simpMessagingTemplate).convertAndSend(anyString(), any(ProductChangeEvent.class));
+	}
+
+	@Test
+	public void shouldMarkEventAsProcessed() {
+		// given
+		ProductChangeEvent productChangeEvent = new ProductChangeEvent();
+
+		// when
+		eventBus.publishEvent(productChangeEvent);
+
+		// then
+		Awaitility.await().atMost(500, TimeUnit.MILLISECONDS).until(() -> productChangeEvent.isProcessed());
 	}
 
 	@Test

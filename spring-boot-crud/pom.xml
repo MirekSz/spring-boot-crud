@@ -14,6 +14,11 @@
 	</parent>
 
 	<dependencies>
+	<dependency>
+    <groupId>org.awaitility</groupId>
+    <artifactId>awaitility-proxy</artifactId>
+    <version>3.0.0-rc1</version>
+</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
