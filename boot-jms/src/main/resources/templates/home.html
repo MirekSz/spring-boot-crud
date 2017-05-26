@@ -1,0 +1,72 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="fragments/layout">
+<body>
+	<div layout:fragment="content">
+		<div class="alert alert-info " role="alert">
+			<h1 style="display: inline">Aktualny kurs waluty: </h1><span class="glyphicon glyphicon-usd" style="font-size: 2em"></span>
+			<h2 id="rate" style="display: inline">0</h2>
+			<span class="pull-right">
+				<h1 style="display: inline">Komunikaty:</h1>
+				<h2 id="counter" style="display: inline">0</h2>
+			</span>
+		</div>
+		<canvas id="ratesChart" width="200" height="60"></canvas>
+
+		<script>
+			var source = new EventSource('currencyRates/stream');
+			source.addEventListener('open', function(e) {
+			});
+			var counter = 0;
+			source.addEventListener('message', function(e) {
+				var rate = JSON.parse(e.data)
+				$("#rate").text(rate.euroVal.toFixed(2)+', '+rate.usdVal.toFixed(2));
+				$("#counter").text(counter);
+				config.data.datasets[0].data.push(rate.euroVal);
+				config.data.datasets[1].data.push(rate.usdVal);
+				config.data.labels.push(counter++);
+				ratesChart.update();
+			}, false);
+
+			var config = {
+				type : 'line',
+				data : {
+					datasets : [ {
+						backgroundColor : "rgb(255, 99, 132)",
+						borderColor : 'rgb(255, 99, 132)',
+						fill : false,
+						showLine : true,
+						label : 'EUR',
+						data : [],
+						borderDash: [5, 5]
+					}, {
+						backgroundColor : 'rgb(54, 162, 235)',
+						borderColor : 'rgb(54, 162, 235)',
+						fill : false,
+						showLine : true,
+						label : 'USD',
+						data : [],
+						borderDash: [5, 5]
+					} ]
+				},
+				options : {
+					scales : {
+						xAxes : [ {
+							type : 'time',
+							ticks : {
+								autoSkip : true,
+								maxTicksLimit : 100
+							},
+							gridLines : {
+								display : false
+							}
+						} ]
+					}
+				}
+			};
+			var ratesChart = new Chart($("#ratesChart"), config);
+		</script>
+	</div>
+</body>
+
+</html>
