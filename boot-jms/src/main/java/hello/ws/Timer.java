@@ -10,7 +10,7 @@ public class Timer {
 	@Autowired
 	private SimpMessagingTemplate webSocket;
 
-	@Scheduled(fixedRate = 1000)
+	@Scheduled(fixedRate = 10000)
 	public void tick() {
 		Data data = new Data();
 		data.setName("go");

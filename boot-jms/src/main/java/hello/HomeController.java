@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.session.SessionRegistry;
@@ -26,6 +27,12 @@ public class HomeController {
 		data.setLogin(p.getName());
 		data.setRespo(data.getName() + p.getName() + " " + allPrincipals.size());
 		webSocket.convertAndSendToUser(p.getName(), "/queue/priv", data);
+	}
+
+	@MessageMapping("/topic/chat/{institutionId}")
+	public void greeting(@DestinationVariable String institutionId, final Data message) throws Exception {
+		message.setRespo("/topic/chat/" + institutionId);
+		webSocket.convertAndSend("/topic/chat/" + institutionId, message);
 	}
 
 	@RequestMapping(value = "/")

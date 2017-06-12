@@ -39,4 +39,11 @@ setTimeout(function() {
 	stompClient.send("/jms/topic/hello", {}, JSON.stringify({
 		'name' : 'mirek'
 	}));
-}, 2000)
+	stompClient.subscribe("/topic/chat/{institutionId}", function(t) {
+		console.log('chat',t);
+	});
+	
+	stompClient.send("/jms/topic/chat/1", {}, JSON.stringify({
+		'name' : 'mirek'
+	}));
+}, 5000)
