@@ -2,10 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:tiles="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
 <title>JMS</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="_csrf" th:content="${_csrf.token}" />
+<meta name="_csrf_header" th:content="${_csrf.headerName}" />
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script src="http://blackpeppersoftware.github.io/thymeleaf-fragment.js/thymeleaf-fragment.js"
 	defer="defer" th:if="false"></script>
@@ -13,6 +16,20 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.js"></script>
 </head>
 <body>
+	<div sec:authorize="isAuthenticated()">
+  This content is only shown to authenticated users.
+</div>
+<div sec:authorize="hasAnyRole('ROLE_ADMIN')">
+  hasAnyRole('ROLE_ADMIN')
+</div>
+<div sec:authorize="hasAnyRole('ROLE_USER')">
+  hasAnyRole('ROLE_USER')
+</div>
+<div sec:authorize="hasRole('ROLE_USER')">
+  hasRole('ROLE_USER')
+</div>
+Logged user: <span sec:authentication="name">Bob</span>
+Roles: <span sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</span>
 <div  layout:fragment="content"></div>
 </body>
 </html>
