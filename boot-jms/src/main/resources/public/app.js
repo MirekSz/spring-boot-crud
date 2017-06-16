@@ -17,7 +17,7 @@ $(document).ready(function(){
 					
 				var left = Math.floor((Math.random() * 1000) + 1);
 				var top=Math.floor((Math.random() * 700) + 1);
-				$(document.body).append('<img alt="" src="user.png" style="position:absolute;width:32px;height:32px;top:'+top+'px;left:'+left+'px">')
+				$(document.body).append('<img alt="" src="avatar.png" style="position:absolute;width:32px;height:32px;top:'+top+'px;left:'+left+'px">')
 			});
 			
 			stompClient.subscribe("/user/queue/priv", function(q) {
