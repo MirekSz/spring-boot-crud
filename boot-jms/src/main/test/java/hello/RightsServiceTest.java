@@ -70,7 +70,6 @@ public class RightsServiceTest {
 		service.admin();
 	}
 
-	@WithMockUser(roles = { "ADMIN" })
 	@Test
 	public void mvc() throws Exception {
 		String login = "a";

@@ -36,6 +36,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.logout().permitAll().and().sessionManagement()
 				.sessionAuthenticationStrategy(sessionAuthenticationStrategy()).and().csrf()
 				.csrfTokenRepository(withHttpOnlyFalse);
+		// .and()
+		// .addFilterBefore(new JWTAuthenticationFilter(),
+		// UsernamePasswordAuthenticationFilter.class);
 	}
 
 	@Bean
