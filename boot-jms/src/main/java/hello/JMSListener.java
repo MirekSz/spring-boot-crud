@@ -35,11 +35,11 @@ public class JMSListener {
 		return emitter;
 	}
 
-	@JmsListener(destination = "rates")
+	@JmsListener(destination = "rates", containerFactory = "s")
 	public void receiveQueue(Map<String, Object> message) throws JMSException, Exception {
+		System.out.println(message);
 		if (emitter != null) {
 			emitter.send(message, MediaType.APPLICATION_JSON);
 		}
 	}
-
 }

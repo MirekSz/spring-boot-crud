@@ -19,12 +19,13 @@
 			});
 			var counter = 0;
 			source.addEventListener('message', function(e) {
+				counter++;
 				var rate = JSON.parse(e.data)
 				$("#rate").text(rate.euroVal.toFixed(2)+', '+rate.usdVal.toFixed(2));
 				$("#counter").text(counter);
 				config.data.datasets[0].data.push(rate.euroVal);
 				config.data.datasets[1].data.push(rate.usdVal);
-				config.data.labels.push(counter++);
+				config.data.labels.push(counter);
 				ratesChart.update();
 			}, false);
 

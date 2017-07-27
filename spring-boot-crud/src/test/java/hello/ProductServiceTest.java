@@ -58,9 +58,8 @@ public class ProductServiceTest extends BaseTest {
 
 		// when
 		eventBus.publishEvent(productChangeEvent);
-
 		// then
-		Awaitility.await().atMost(500, TimeUnit.MILLISECONDS).until(() -> productChangeEvent.isProcessed());
+		Awaitility.await().atMost(5, TimeUnit.SECONDS).until(() -> productChangeEvent.isProcessed());
 	}
 
 	@Test
