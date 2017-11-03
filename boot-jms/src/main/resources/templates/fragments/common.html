@@ -1,0 +1,8 @@
+<div th:fragment="common_header(title,links,name,content)">
+  <div th:replace="${title}">The awesome application</div>
+  <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/awesomeapp.css}">
+  <link rel="shortcut icon" th:href="@{/images/favicon.ico}">
+  <script type="text/javascript" th:src="@{/sh/scripts/codebase.js}"></script>
+[[${name}]]
+[(${content})]
+</div>

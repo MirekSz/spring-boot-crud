@@ -3,6 +3,13 @@
 	layout:decorator="fragments/layout">
 <body>
 	<div layout:fragment="content">
+	
+	<div th:replace="fragments/common :: common_header(~{::title},~{::link},'demo',~{ :: .breadcrumb})">
+  <title>Awesome - Main</title>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/themes/smoothness/jquery-ui.css}">
+  <div class="breadcrumb" >expression</div>
+</div>
 		<div class="alert alert-info " role="alert">
 			<h1 style="display: inline">Aktualny kurs waluty: </h1><span class="glyphicon glyphicon-usd" style="font-size: 2em"></span>
 			<h2 id="rate" style="display: inline">0</h2>
