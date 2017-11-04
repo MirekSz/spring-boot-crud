@@ -5,7 +5,7 @@ BOM
 * Spring Boot
 * Spring Security
 * CXF
-* Thymelaft
+* Thymelaft layout, partial, formater, partial
 * Jobs, Asynch
 * Websockets
 * Spring Data
