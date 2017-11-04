@@ -13,7 +13,7 @@ actuator
 spring testing
 emma
 spring data
-
+devtools livereload
 cache
 jProfiler
 Takipi
