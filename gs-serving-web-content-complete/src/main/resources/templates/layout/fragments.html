@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<head th:fragment="header" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<meta charset="UTF-8" />
+<link th:href="@{/assets/css/bootstrap.css}" rel="stylesheet" />
+<link th:href="@{/assets/css/style.css}" rel="stylesheet" />
+<link th:href="@{/assets/css/font-awesome.min.css}" rel="stylesheet" />
+<link th:href="@{/assets/css/nprogress.css}" rel="stylesheet" />
+<script type="text/javascript" th:src="@{/assets/js/jquery-2.2.4.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/nprogress.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/angular.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/app.js}"></script>
+<script>
+	NProgress.configure({
+		easing : 'ease',
+		speed : 1000
+	});
+	$(document).ajaxStart(function() {
+		NProgress.start();
+	});
+	$(document).ajaxStop(function() {
+		NProgress.done();
+	});
+</script>
+</head>
+<div th:fragment="menu" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	<!-- Fixed navbar -->
+	<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target=".navbar-collapse">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/"><i><span style="font-size:24px"><span style="color:red">ALT</span>KOM</span> training app</i></a>
+			</div>
+			<div class="navbar-collapse collapse navbar-right">
+				<ul class="nav navbar-nav">
+					<li class="active"><a th:href="@{/}"><span class="glyphicon glyphicon-home"/> HOME</a></li>
+					<li><a th:href="@{/greeting}">ABOUT</a></li>
+					<li><a th:href="@{/contact}">CONTACT</a></li>
+					<li><a href="#" onClick="$('#logoutForm').submit();return false;"><span class="glyphicon glyphicon-off" /> LOGOUT <span sec:authentication="name"></span> </a></li>
+				</ul>
+				<form th:action="@{/logout}" method="post" style="display: none"
+					id="logoutForm">
+					<input type="submit" value="Log out" id="logout" /> 
+				</form>
+			</div>
+			<!--/.nav-collapse -->
+		</div>
+	</div>
+	<br /> <br /> <br /> <br />
+</div>
+
+<div th:fragment="field(label,name)" xmlns:th="http://www.thymeleaf.org"
+	class="form-group"
+	th:classappend="${#fields.hasErrors('*{__${name}__}')}? 'has-error'">
+	<!-- fragments/field -->
+	<label class="control-label" th:text="${label}">name </label>
+	<div class="controls">
+		<input th:field="*{__${name}__}" th:errorclass="error"
+			th:name="${name}" value="Jan" th:value="*{__${name}__}"
+			class="form-control" /> <span class="help-block"
+			th:if="${#fields.hasErrors('*{__${name}__}')}"
+			th:errors="*{__${name}__}"></span>
+	</div>
+
+</div>
+<div th:fragment="imgField" xmlns:th="http://www.thymeleaf.org">
+	<div class="form-group">
+		<!-- fragments/imgfield -->
+		<label class="control-label" th:text="${label}">name</label> <input
+			th:name="${name}" value="Jan" type="file" accept=".png,.jpg"/>
+	</div>
+</div>
+
+<div id="footerwrap" th:fragment="footer"
+	xmlns:th="http://www.thymeleaf.org">
+	footer
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-4">
+				<h4>About</h4>
+				<div class="hline-w"></div>
+				<p>Lorem Ipsum is simply dummy text of the printing and
+					typesetting industry. Lorem Ipsum has been the industry's standard
+					dummy text ever since the 1500s.</p>
+			</div>
+			<div class="col-lg-4">
+				<h4>Social Links</h4>
+				<div class="hline-w"></div>
+				<p>
+					<a href="#"><i class="fa fa-dribbble"></i></a> <a href="#"><i
+						class="fa fa-facebook"></i></a> <a href="#"><i
+						class="fa fa-twitter"></i></a> <a href="#"><i
+						class="fa fa-instagram"></i></a> <a href="#"><i
+						class="fa fa-tumblr"></i></a>
+				</p>
+			</div>
+			<div class="col-lg-4">
+				<h4>Our Bunker</h4>
+				<div class="hline-w"></div>
+				<p>
+					Some Ave, 987,<br /> 23890, New York,<br /> United States.<br />
+				</p>
+			</div>
+
+		</div>
+	</div>
+</div>

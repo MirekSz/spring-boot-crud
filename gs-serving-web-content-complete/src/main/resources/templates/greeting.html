@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html layout:decorator="layout/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<body>
+	<div class="container" layout:fragment="content">
+		<script>
+			var source = new EventSource('/productsStream');
+			source.addEventListener('open', function(e) {
+			});
+			var newProds=0;
+			source.addEventListener('message', function(e) {
+				newProds++;
+				var product = JSON.parse(e.data)
+				console.log(product)
+				$("#newProds").html(newProds)
+			}, false);
+		</script>
+		<div ng-app="angular" ng-controller="ProductController">
+		<input ng-change="search()" ng-model="query" ng-model-options="{debounce: 500 }"/>
+		<table class="table table-hover">
+			<tr>
+				<th>Id</th>
+				<th>Name</th>
+				<th>Quantity</th>
+				<th>Price</th>
+			</tr>
+			<tr ng-repeat="product in products">
+				<td>{{product.id}}</td>
+				<td>{{product.name}}</td>
+				<td>{{product.quantity}}</td>
+				<td>{{product.price}}</td>
+			</tr>
+		</table>
+		</div>
+		<p th:text="'Hello, ' + ${name} + '!'" />
+		<div class="panel">
+			<div class="panel-heading">Nowy product</div>
+			<div class="panel-body">
+				<form method="post" th:object="${product}" class="form">
+					<input th:field="*{name}" class="form-control" /> <input
+						th:field="*{quantity}" class="form-control" /> <input
+						th:field="*{price}" class="form-control" />
+					<button type="submit" class="btn pull-right">Zapisz</button>
+				</form>
+			</div>
+		</div>
+		<form class="pull-right">
+		 	Nowe produky:<span id="newProds" class="glyphicon glyphicon-plus">0</span>
+			<input name="query" class="form-control" placeholder="Szukaj" th:value="${param.query!=null?param.query[0]:''}" />
+		</form>
+		<table class="table table-hover">
+			<tr>
+				<th>Id</th>
+				<th>Name</th>
+				<th>Quantity</th>
+				<th>Price</th>
+			</tr>
+			<tr th:each="product : ${products}">
+				<td th:text="${product.id}">1</td>
+				<td th:text="${product.name}">Rower</td>
+				<td th:text="${product.quantity}">12</td>
+				<td th:text="${product.price}">12.45</td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>
