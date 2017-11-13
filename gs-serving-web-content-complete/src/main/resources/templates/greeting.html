@@ -38,6 +38,18 @@
 			<div class="panel-heading">Nowy product</div>
 			<div class="panel-body">
 				<form method="post" th:object="${product}" class="form">
+							<div th:if="${#fields.hasGlobalErrors()}"
+						class="has-error alert alert-dismissible alert-danger">
+						<button type="button" class="close" data-dismiss="alert">×</button>
+						<label class="control-label"
+							th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</label>
+					</div>
+							<div th:if="${#fields.hasErrors()}"
+						class="has-error alert alert-dismissible alert-danger">
+						<button type="button" class="close" data-dismiss="alert">×</button>
+						<label class="control-label"
+							th:each="err : ${#fields.errors()}" th:text="${err}">...</label>
+					</div>
 					<input th:field="*{name}" class="form-control" /> <input
 						th:field="*{quantity}" class="form-control" /> <input
 						th:field="*{price}" class="form-control" />
