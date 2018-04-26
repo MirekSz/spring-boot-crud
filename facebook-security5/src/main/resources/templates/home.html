@@ -1,0 +1,22 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Facebook Demo</title>
+	</head>
+
+	<body>
+		<h2>Login <span th:text="${principal.name}">NAME</span></h2>
+		<h2>Roles <span th:text="${principal.authorities}">NAME</span></h2>
+		<h2>Token <span th:text="${accessToken}">NAME</span></h2>
+	<!--
+
+		<th:block th:each="post : ${feed}">
+			<h4 th:text="${post.story}">STORY</h4>
+			<p th:text="${post.message}">MESSAGE</p>
+			<hr/>
+		</th:block>
+		 -->
+	</body>
+</html>
