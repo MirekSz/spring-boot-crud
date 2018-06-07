@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html layout:decorator="layout/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<body>
+	<div class="container" layout:fragment="content">
+		<div class="panel panel-default">
+			<div class="panel-heading">Auction form</div>
+			<div class="panel-body">
+				<form action="#" 
+					enctype="multipart/form-data" th:object="${auction}" method="post"
+					class="form">
+
+					<div th:if="${#fields.hasGlobalErrors()}">
+						<div class="alert alert-danger">
+					<span class="glyphicon glyphicon-exclamation-sign pull-right" aria-hidden="true"></span>
+							<ul style="padding-left: 10px">
+								<li th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</li>
+							</ul>
+						</div>
+					</div>
+				<input th:field="*{expireDate}" />
+				
+				<ul>
+  <li th:each="err : ${#fields.errors('expireDate')}" th:text="${err}" />
+</ul>
+					<div th:include="partials/field :: field"
+						th:with="key='auction.name'"></div>
+
+					<div th:include="partials/field :: textarea"
+						th:with="key='auction.description'"></div>
+
+					<div th:include="partials/field :: number"
+						th:with="key='auction.minPrice'"></div>
+					<input type="file" name="file" />
+					<button type="submit" class="btn btn-default pull-right">Save</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

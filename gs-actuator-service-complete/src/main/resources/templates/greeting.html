@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Getting Started: Serving Web Content</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="assets/select/css/select2.css" rel="stylesheet" />
+<link href="assets/css/bootstrap.css" rel="stylesheet" />
+<link href="assets/css/style.css" rel="stylesheet" />
+<link href="assets/css/font-awesome.min.css" rel="stylesheet" />
+<script type="text/javascript" src="assets/js/jquery-2.2.4.js"></script>
+<script type="text/javascript" src="assets/js/stomp.js"></script>
+<script type="text/javascript" src="assets/js/sockjs.js"></script>
+<script type="text/javascript" src="assets/js/sockjs.js"></script>
+<script type="text/javascript" src="assets/select/js/select2.full.js"></script>
+<script type="text/javascript" src="custom/products.js"></script>
+<link th:href="@{/assets/css/nprogress.css}" rel="stylesheet" />
+<script type="text/javascript" th:src="@{/assets/js/nprogress.js}"></script>
+</head>
+<script>
+	NProgress.configure({
+		easing : 'ease',
+		speed : 1000
+	});
+	$(document).ajaxStart(function() {
+		NProgress.start();
+	});
+	$(document).ajaxStop(function() {
+		NProgress.done();
+	});
+</script>
+<body>
+	<br />
+	<div class="container">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<form method="post" th:object="${person}"
+					enctype="multipart/form-data" class="form" id="productForm">
+						<div class="alert alert-danger">
+							<span class="glyphicon glyphicon-exclamation-sign pull-right"
+								aria-hidden="true"></span>
+					</div>
+
+					<select id="referer" class="form-control">
+					</select>
+					<div
+						th:replace="layout/fragments::field(label=#{'person.name'},name='name')"></div>
+					<div th:include="layout/fragments::imgField"
+						th:with="name='file',label=#{'person.phone'}"></div>
+					<div th:include="layout/fragments::imgField"
+						th:with="name='file',label=#{'person.phone'}"></div>
+					<div>
+						<button class="btn btn-primary" id="addTag">Add tag</button>
+						<div id="tags" class="form-inline form-group"></div>
+					</div>
+					<br /> <br />
+					<button type="submit" class="btn btn-default">Add person</button>
+					<button type="submit" class="btn btn-default" onclick="submitViaAJAX('productForm');return false;">Add person via ajax</button>
+				</form>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading clearfix">
+				<a href="#" id="refresh" class="btn btn-default pull-right">Odswiez</a>
+			</div>
+			<div class="panel-body">
+
+				<ul class="list-group">
+
+					<li class="list-group-item clearfix" th:fragment="lista"
+						th:each="el,iterStat  : ${persons}"><div class="row">
+							<h2 class="col-xs-4"
+								th:text="${iterStat.count  +'. '+ el.name +' ('+el.tags.size()+')'}"></h2>
+
+							<img class="pull-right col-xs-8" style="width: 120px"
+								th:src="@{'/phones/'+${el.phone}}" />
+						</div></li>
+				</ul>
+			</div>
+		</div>
+
+
+	</div>
+</body>
+</html>
