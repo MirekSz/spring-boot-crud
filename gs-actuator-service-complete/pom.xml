@@ -20,7 +20,10 @@
 			<artifactId>javamelody-spring-boot-starter</artifactId>
 			<version>1.72.0</version>
 		</dependency>
-
+<dependency>
+			<groupId>com.hazelcast</groupId>
+			<artifactId>hazelcast</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>com.lowagie</groupId>
 			<artifactId>itext</artifactId>
