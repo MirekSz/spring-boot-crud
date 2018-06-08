@@ -25,11 +25,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import hello.async.BackgroundTask;
 import reactor.core.publisher.Flux;
 
 @Controller
@@ -37,6 +37,16 @@ import reactor.core.publisher.Flux;
 public class AuctionsController {
 	@Autowired
 	AuctionRepo repo;
+	@Autowired
+	BackgroundTask backgroundTask;
+
+	@RequestMapping(path = "/stream", method = RequestMethod.GET)
+	public SseEmitter stream() throws IOException {
+
+		SseEmitter emitter = new SseEmitter();
+		backgroundTask.add(emitter);
+		return emitter;
+	}
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -123,13 +133,6 @@ public class AuctionsController {
 			FileUtils.copyInputStreamToFile(uploadfile.getInputStream(),
 					new File(savePath + File.separator + originalFilename));
 		}
-	}
-
-	@ResponseBody
-	@RequestMapping(value = "/stream", method = RequestMethod.GET)
-	public SseEmitter stream() {
-		ssEmitter = new SseEmitter();
-		return ssEmitter;
 	}
 
 	public void handle(Auction auction, BindingResult bindingResult) {

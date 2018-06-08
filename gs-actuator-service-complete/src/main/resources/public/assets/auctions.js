@@ -1,7 +1,7 @@
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
 
-var _ctx = $("meta[name='ctx']").attr("content");
+var _ctx = '';
 
 $(document).ajaxSend(function(e, xhr, options) {
 	xhr.setRequestHeader(header, token);
@@ -23,7 +23,14 @@ $(document).ready(function() {
 		var source = new EventSource(_ctx + '/auctions/stream');
 		source.onmessage = function(event) {
 			console.log(event)
+			$.bootstrapGrowl(event.data);
 		}
+		
+		  source.error= function (e) {
+	            if (e.readyState == EventSource.CLOSED) {
+	                source = new EventSource(_ctx + '/auctions/stream');
+	            }
+	        };
 	}
 })
 // thymelaft javascript
