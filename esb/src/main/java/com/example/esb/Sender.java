@@ -15,6 +15,7 @@ public class Sender {
 
 	@Transactional
 	public void send() {
+		jmsTemplate.convertAndSend("mailbox", new Email("info@example.com", "Hello"));
 		// for (int i = 0; i < 10000; i++) {
 		// jmsTemplate.convertAndSend("mailbox", new Email("info@example.com",
 		// "Hello" + i));
