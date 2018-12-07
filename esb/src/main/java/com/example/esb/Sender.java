@@ -6,15 +6,20 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import io.micrometer.core.instrument.MeterRegistry;
+
 @Component
 public class Sender {
 	@Autowired
 	JmsTemplate jmsTemplate;
 	@Autowired
 	JmsTransactionManager jmsTransactionManager;
+	@Autowired
+	private MeterRegistry metricRegistry;
 
 	@Transactional
 	public void send() {
+		metricRegistry.counter("mailbox").increment();
 		jmsTemplate.convertAndSend("mailbox", new Email("info@example.com", "Hello"));
 		// for (int i = 0; i < 10000; i++) {
 		// jmsTemplate.convertAndSend("mailbox", new Email("info@example.com",
