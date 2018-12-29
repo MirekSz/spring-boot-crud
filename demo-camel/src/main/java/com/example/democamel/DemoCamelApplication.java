@@ -5,15 +5,20 @@ import javax.annotation.PostConstruct;
 
 import org.apache.activemq.camel.component.ActiveMQComponent;
 import org.apache.camel.CamelContext;
+import org.apache.cxf.Bus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ImportResource;
 
 @SpringBootApplication
+@ImportResource("META-INF/spring/camel-config.xml")
 public class DemoCamelApplication {
 
 	@Autowired
 	CamelContext camelContext;
+	@Autowired
+	Bus bus;
 
 	@PostConstruct
 	public void init() {

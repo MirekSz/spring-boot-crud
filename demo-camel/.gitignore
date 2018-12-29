@@ -1,4 +1,6 @@
 /target/
+/bin/
+/activemq-data/
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
