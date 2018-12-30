@@ -47,7 +47,9 @@ public class LoggingProcess extends RouteBuilder {
 						InputReportIncident body = (InputReportIncident) exchange.getIn().getBody();
 						body.setPhone("12312321");
 					}
-				}).to("log:cxf3");
+				}).to("log:cxf3")
+				.to("cxf:http://localhost:6070/incident?dataFormat=PAYLOAD&endpointName=ReportIncidentEndpointServicePort&wsdlURL=http://localhost:6070/incident?wsdl&serviceName={http://proxy.cxf.example.camel.apache.org/}ReportIncidentEndpointServiceService")
+				.convertBodyTo(String.class).to("log:cxf4");
 		// from("cxf://myEndpoint?serviceClass=com.example.democamel.ServiceHandler").to("log:cxf");
 
 		from("jetty:http://localhost:5454/hello").choice().when(simple("${header.name} == 'a'")).to("log:a")
