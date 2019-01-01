@@ -22,7 +22,8 @@ public class DemoCamelApplication {
 
 	@PostConstruct
 	public void init() {
-		camelContext.addComponent("activemq", ActiveMQComponent.activeMQComponent("vm://localhost?broker.persistent=true"));
+		// camelContext.addComponent("activemq", ActiveMQComponent.activeMQComponent("vm://localhost?broker.persistent=true"));
+		camelContext.addComponent("activemq", ActiveMQComponent.activeMQComponent());
 	}
 
 	public static void main(final String[] args) {

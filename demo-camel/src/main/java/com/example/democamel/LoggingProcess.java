@@ -13,11 +13,13 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.stax.StAXSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.activemq.camel.component.ActiveMQComponent;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.converter.jaxb.JaxbDataFormat;
 import org.apache.camel.example.reportincident.InputReportIncident;
+import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.spi.DataFormat;
 import org.springframework.stereotype.Component;
 
@@ -54,7 +56,9 @@ public class LoggingProcess extends RouteBuilder {
 
 		from("jetty:http://localhost:5454/hello").choice().when(simple("${header.name} == 'a'")).to("log:a")
 				.when(simple("${header.name} == 'b'")).to("log:b").otherwise().to("log:c").end()
-				.to("activemq:queue:orders?exchangePattern=InOnly").process("responseProcessor").delay(5000);
+				.to("activemq:queue:orders?exchangePattern=InOnly",
+						"activemq:topic:events?exchangePattern=InOnly&destination.consumer.retroactive=true")
+				.process("responseProcessor").delay(5000);
 		// .to("seda:task?waitForTaskToComplete=never", "seda:task?waitForTaskToComplete=never").process("responseProcessor");
 
 		// from("activemq:queue:orders").to("seda:task?waitForTaskToComplete=never", "seda:task?waitForTaskToComplete=never");
@@ -85,6 +89,34 @@ public class LoggingProcess extends RouteBuilder {
 		// }).delay(5000).to("log:end");
 		//
 		from("activemq:queue:dead").delay(5000).to("activemq:queue:old-orders?exchangePattern=InOnly");
+
+		add();
 	}
 
+	public static void add() {
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(40000);
+					DefaultCamelContext defaultCamelContext = new DefaultCamelContext();
+					// defaultCamelContext.addComponent("activemq",
+					// ActiveMQComponent.activeMQComponent("vm://localhost?broker.persistent=true"));
+					defaultCamelContext.addComponent("activemq", ActiveMQComponent.activeMQComponent());
+					defaultCamelContext.addRoutes(new RouteBuilder() {
+
+						@Override
+						public void configure() throws Exception {
+							from("activemq:topic:events").to("log:events");
+						}
+					});
+					defaultCamelContext.start();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}).start();
+	}
 }
