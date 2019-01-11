@@ -72,13 +72,23 @@
 			<version>3.2.7</version>
 		</dependency>
 		<dependency>
-    <groupId>org.apache.cxf</groupId>
-    <artifactId>cxf-rt-transports-http-jetty</artifactId>
-  	<version>3.2.7</version>
-</dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-transports-http-jetty</artifactId>
+			<version>3.2.7</version>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-freemarker</artifactId>
+			<version>2.23.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-groovy</artifactId>
+			<version>2.23.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-jacksonxml</artifactId>
 			<version>2.23.0</version>
 		</dependency>
 		<dependency>
@@ -104,10 +114,18 @@
 			<version>22.0</version>
 		</dependency>
 		<dependency>
-    <groupId>com.fasterxml.jackson.dataformat</groupId>
-    <artifactId>jackson-dataformat-xml</artifactId>
-    <version>2.9.4</version>
-</dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-xml</artifactId>
+			<version>2.9.4</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all -->
+		<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy-all</artifactId>
+			<version>2.5.4</version>
+			<type>pom</type>
+		</dependency>
+
 	</dependencies>
 
 	<build>

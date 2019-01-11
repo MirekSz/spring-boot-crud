@@ -1,0 +1,36 @@
+<routes xmlns="http://camel.apache.org/schema/spring">
+	<route id="bar">
+		<from uri="file://./inbox?move=.done&amp;autoCreate=true;" />
+		<transform>
+			<groovy>
+				import groovy.xml.*;
+			<![CDATA[
+			def result='<order>';
+			def lines = request.body.getFile().readLines();
+			for (def line in lines){
+				def code =  line.split(':');
+				def cc = code[0].replaceAll("\"","").split("-");
+				result+="""<${cc[0]} comment=${code[1]}>${cc[1]}</${cc[0]}>""";
+			}
+
+			result+='</order>';
+			request.headers.CamelFileName=request.headers.CamelFileName+'.xml';
+			exchange.in.body = result;
+
+			]]>
+			</groovy>
+		</transform>
+		<to uri="log:ok" />
+		<transform>
+			<groovy>
+				import groovy.xml.*;
+			<![CDATA[
+			exchange.in.body =  	XmlUtil.serialize(exchange.in.body);
+			]]>
+			</groovy>
+		</transform>
+		<to uri="log:ok2" />
+		<to uri="file://./outbox?autoCreate=true;" />
+	</route>
+
+</routes>
