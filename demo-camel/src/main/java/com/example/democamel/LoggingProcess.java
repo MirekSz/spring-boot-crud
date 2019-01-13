@@ -101,9 +101,9 @@ public class LoggingProcess extends RouteBuilder {
 				try {
 					Thread.sleep(40000);
 					DefaultCamelContext defaultCamelContext = new DefaultCamelContext();
-					// defaultCamelContext.addComponent("activemq",
-					// ActiveMQComponent.activeMQComponent("vm://localhost?broker.persistent=true"));
-					defaultCamelContext.addComponent("activemq", ActiveMQComponent.activeMQComponent());
+					defaultCamelContext.addComponent("activemq",
+							ActiveMQComponent.activeMQComponent("vm://localhost?broker.persistent=true"));
+					// defaultCamelContext.addComponent("activemq", ActiveMQComponent.activeMQComponent());
 					defaultCamelContext.addRoutes(new RouteBuilder() {
 
 						@Override
