@@ -1,9 +1,10 @@
-<routes xmlns="http://camel.apache.org/schema/spring">
-	<route id="bar">
-		<from uri="file://./inbox?move=.done&amp;autoCreate=true;" />
+<routes xmlns="http://camel.apache.org/schema/spring" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring-2.23.1.xsd">
+	<route id="logic">
+		<from uri="direct:start" />
 		<transform>
 			<groovy>
-				import groovy.xml.*;
+			import groovy.xml.*;
 			<![CDATA[
 			def result='<order>';
 			def lines = request.body.getFile().readLines();
@@ -18,18 +19,26 @@
 			exchange.in.body = result;
 
 			]]>
-			</groovy>
+		</groovy>
 		</transform>
 		<to uri="log:ok" />
 		<transform>
 			<groovy>
-				import groovy.xml.*;
+			import groovy.xml.*;
 			<![CDATA[
 			exchange.in.body =  	XmlUtil.serialize(exchange.in.body);
 			]]>
-			</groovy>
+		</groovy>
 		</transform>
 		<to uri="log:ok2" />
+		<to uri="direct:stop" />
+	</route>
+	<route id="infra1">
+		<from uri="file://./inbox?move=.done&amp;autoCreate=true;" />
+		<to uri="direct:start" />
+	</route>
+	<route id="infra2">
+		<from uri="direct:stop" />
 		<to uri="file://./outbox?autoCreate=true;" />
 	</route>
 
