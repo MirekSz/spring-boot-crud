@@ -1,7 +1,10 @@
 
 package com.example.democamel;
 
+import java.io.InputStream;
 import java.io.StringWriter;
+import java.util.Date;
+import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.stream.XMLStreamReader;
@@ -16,10 +19,14 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.activemq.camel.component.ActiveMQComponent;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.apache.camel.builder.DeadLetterChannelBuilder;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.converter.jaxb.JaxbDataFormat;
 import org.apache.camel.example.reportincident.InputReportIncident;
 import org.apache.camel.impl.DefaultCamelContext;
+import org.apache.camel.impl.SimpleRegistry;
+import org.apache.camel.model.RouteDefinition;
+import org.apache.camel.model.RoutesDefinition;
 import org.apache.camel.spi.DataFormat;
 import org.springframework.stereotype.Component;
 
@@ -111,6 +118,52 @@ public class LoggingProcess extends RouteBuilder {
 							from("activemq:topic:events").to("log:events");
 						}
 					});
+					defaultCamelContext.start();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}).start();
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(20000);
+					SimpleRegistry registry = new SimpleRegistry();
+					DefaultCamelContext defaultCamelContext = new DefaultCamelContext(registry);
+					defaultCamelContext.addComponent("activemq",
+							ActiveMQComponent.activeMQComponent("vm://localhost?broker.persistent=true"));
+					// System.out.println(new File(".").getAbsolutePath());
+					// defaultCamelContext.addRoutes(new RouteBuilder() {
+					//
+					// @Override
+					// public void configure() throws Exception {
+					// from("file://./inbox?move=.done&autoCreate=true").to("file://./outbox?autoCreate=true");
+					// }
+					// });
+					DeadLetterChannelBuilder builder = new org.apache.camel.builder.DeadLetterChannelBuilder();
+					builder.redeliveryDelay(5000);
+					builder.maximumRedeliveries(3);
+					builder.setDeadLetterUri("activemq:queue:dead-files");
+					builder.setOnExceptionOccurred(new Processor() {
+
+						@Override
+						public void process(final Exchange exchange) throws Exception {
+							System.out.println(new Date() + " Ex " + exchange.getException());
+
+						}
+					});
+					registry.put("errorHandler", builder);
+					InputStream is = Main.class.getResourceAsStream("/route.xml");
+					RoutesDefinition routes = defaultCamelContext.loadRoutesDefinition(is);
+					List<RouteDefinition> routes2 = routes.getRoutes();
+					for (RouteDefinition routeDefinition : routes2) {
+						routeDefinition.setErrorHandlerRef("errorHandler");
+					}
+					defaultCamelContext.addRouteDefinitions(routes.getRoutes());
+
 					defaultCamelContext.start();
 				} catch (Exception e) {
 					// TODO Auto-generated catch block

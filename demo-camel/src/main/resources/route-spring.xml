@@ -1,0 +1,63 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:camel="http://camel.apache.org/schema/spring" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+    http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    		<bean id="myDeadLetterErrorHandler" class="org.apache.camel.builder.DeadLetterChannelBuilder">
+			<property name="deadLetterUri" value="jms:queue:dead" />
+			<property name="redeliveryPolicy" ref="myRedeliveryPolicyConfig" />
+		</bean>
+		<bean id="myRedeliveryPolicyConfig" class="org.apache.camel.processor.RedeliveryPolicy">
+			<property name="maximumRedeliveries" value="3" />
+			<property name="redeliveryDelay" value="5000" />
+		</bean>
+
+	<camelContext xmlns="http://camel.apache.org/schema/spring">
+
+		<route id="logic" errorHandlerRef="myDeadLetterErrorHandler">
+			<from uri="direct:start" />
+			<transform id="lineByLine">
+				<groovy id="lineByLineG">
+			import groovy.xml.*;
+			<![CDATA[
+			def result='<order>';
+			def lines = request.body.getFile().readLines();
+			for (def line in lines){
+				def code =  line.split(':');
+				def cc = code[0].replaceAll("\"","").split("-");
+				result+="""<${cc[0]} comment=${code[1]}>${cc[1]}</${cc[0]}>""";
+			}
+
+			result+='</order>';
+			request.headers.CamelFileName=request.headers.CamelFileName+'.xml';
+			exchange.in.body = result;
+
+			]]>
+		</groovy>
+			</transform>
+			<hystrix>
+				<to uri="log:ok" />
+			</hystrix>
+			<transform>
+				<groovy>
+			import groovy.xml.*;
+			<![CDATA[
+			exchange.in.body =  	XmlUtil.serialize(exchange.in.body);
+			]]>
+		</groovy>
+			</transform>
+			<multicast>
+				<to uri="log:ok2" />
+				<to uri="direct:stop" />
+			</multicast>
+		</route>
+		<route id="infra1">
+			<from uri="file://./inbox?move=.done&amp;autoCreate=true;" />
+			<to uri="direct:start" />
+		</route>
+		<route id="infra2">
+			<from uri="direct:stop" />
+			<to uri="file://./outbox?autoCreate=true;" />
+		</route>
+	</camelContext>
+</beans>

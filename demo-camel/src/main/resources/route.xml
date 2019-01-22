@@ -1,9 +1,9 @@
 <routes xmlns="http://camel.apache.org/schema/spring" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring-2.23.1.xsd">
-	<route id="logic">
+	<route id="logic" >
 		<from uri="direct:start" />
-		<transform>
-			<groovy>
+		<transform id="lineByLine">
+			<groovy id="lineByLineG">
 			import groovy.xml.*;
 			<![CDATA[
 			def result='<order>';
@@ -21,7 +21,9 @@
 			]]>
 		</groovy>
 		</transform>
-		<to uri="log:ok" />
+		<hystrix>
+			<to uri="log:ok" />
+		</hystrix>
 		<transform>
 			<groovy>
 			import groovy.xml.*;
@@ -30,8 +32,10 @@
 			]]>
 		</groovy>
 		</transform>
-		<to uri="log:ok2" />
-		<to uri="direct:stop" />
+		<multicast>
+			<to uri="log:ok2" />
+			<to uri="direct:stop" />
+		</multicast>
 	</route>
 	<route id="infra1">
 		<from uri="file://./inbox?move=.done&amp;autoCreate=true;" />
@@ -41,5 +45,4 @@
 		<from uri="direct:stop" />
 		<to uri="file://./outbox?autoCreate=true;" />
 	</route>
-
 </routes>
