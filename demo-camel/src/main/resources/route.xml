@@ -1,24 +1,16 @@
 <routes xmlns="http://camel.apache.org/schema/spring" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring-2.23.1.xsd">
-	<route id="logic" >
+	<route id="slow">
+		<from uri="jetty:http://localhost:5456/hello" />
+		<delay>
+			<simple>500000</simple>
+		</delay>
+		<to uri="log:ok5" />
+	</route>
+	<route id="logic">
 		<from uri="direct:start" />
 		<transform id="lineByLine">
-			<groovy id="lineByLineG">
-			import groovy.xml.*;
-			<![CDATA[
-			def result='<order>';
-			def lines = request.body.getFile().readLines();
-			for (def line in lines){
-				def code =  line.split(':');
-				def cc = code[0].replaceAll("\"","").split("-");
-				result+="""<${cc[0]} comment=${code[1]}>${cc[1]}</${cc[0]}>""";
-			}
-
-			result+='</order>';
-			request.headers.CamelFileName=request.headers.CamelFileName+'.xml';
-			exchange.in.body = result;
-
-			]]>
+			<groovy id="lineByLineG">resource:classpath:lineByLineTransform.groovy
 		</groovy>
 		</transform>
 		<hystrix>

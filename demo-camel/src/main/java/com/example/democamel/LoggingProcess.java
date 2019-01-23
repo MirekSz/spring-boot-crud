@@ -133,6 +133,7 @@ public class LoggingProcess extends RouteBuilder {
 					Thread.sleep(20000);
 					SimpleRegistry registry = new SimpleRegistry();
 					DefaultCamelContext defaultCamelContext = new DefaultCamelContext(registry);
+					defaultCamelContext.setTracing(true);
 					defaultCamelContext.addComponent("activemq",
 							ActiveMQComponent.activeMQComponent("vm://localhost?broker.persistent=true"));
 					// System.out.println(new File(".").getAbsolutePath());
