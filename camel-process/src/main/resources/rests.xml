@@ -1,0 +1,25 @@
+<rests xmlns="http://camel.apache.org/schema/spring" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring-2.23.1.xsd">
+
+	<rest  path="/say" tag="asd"
+		skipBindingOnErrorCode="false" produces="text/plain">
+		<get uri="/hello">
+			<route id="hello-get" />
+			<param name="name" type="query" >
+			
+			</param>
+			<to uri="direct:simpleAnswer" />
+		</get>
+		<get uri="/bye">
+			<route id="bye-get" />
+			<to uri="direct:simpleAnswer" />
+		</get>
+		<post consumes="application/json" uri="/bye">
+			<route id="bye-post" />
+			<param name="body" type="body"
+				dataType="pl.com.stream.camel.process.lib.UserPojo"></param>
+			<to uri="mock:update" />
+			<to uri="direct:simpleAnswer" />
+		</post>
+	</rest>
+</rests>

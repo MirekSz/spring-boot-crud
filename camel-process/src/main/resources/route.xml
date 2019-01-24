@@ -1,0 +1,38 @@
+<routes xmlns="http://camel.apache.org/schema/spring" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring-2.23.1.xsd">
+	<route id="jetty">
+		<from uri="jetty:http://localhost:5456/hello" />
+		<delay>
+			<simple>5</simple>
+		</delay>
+		<to uri="log:jetty" />
+		<log logName="header" message="${headers.name}"></log>
+	</route>
+	<route id="cxf-jaxws">
+		<from
+			uri="cxf://verto-orders?dataFormat=PAYLOAD&amp;wsdlURL=wsdl/hello_world.wsdl" />
+		<!-- <from uri="cxf:bean:verto-orders?dataFormat=PAYLOAD&amp;address=/verto-orders"
+			/> -->
+		<delay>
+			<simple>5</simple>
+		</delay>
+		<to uri="log:cxf-jaxws" />
+	</route>
+	<route id="rest">
+		<from uri="servlet://hello" />
+		<to uri="log:rest" />
+	</route>
+
+	<route id="simpleAnswer">
+		<from uri="direct:simpleAnswer" />
+		<to uri="log:simpleAnswer" />
+		<transform>
+			<constant>Hello World</constant>
+		</transform>
+		<to uri="direct:activemq" pattern="RobustInOnly"/>
+	</route>
+	<route id="activemq">
+		<from uri="direct:activemq" />
+		<to uri="activemq:samples" />
+	</route>
+</routes>

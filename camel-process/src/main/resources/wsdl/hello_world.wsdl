@@ -1,0 +1,377 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://verto.streamsoft.pl"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http"
+	name="operatorService" targetNamespace="http://verto.streamsoft.pl">
+	<wsdl:types>
+		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+			xmlns:tns="http://verto.streamsoft.pl" elementFormDefault="unqualified"
+			targetNamespace="http://verto.streamsoft.pl" version="1.0">
+			<xs:element name="checkGet" type="tns:checkGet" />
+			<xs:element name="checkGetResponse" type="tns:checkGetResponse" />
+			<xs:element name="checkPost" type="tns:checkPost" />
+			<xs:element name="checkPostResponse" type="tns:checkPostResponse" />
+			<xs:element name="checkProfileGet" type="tns:checkProfileGet" />
+			<xs:element name="checkProfileGetResponse" type="tns:checkProfileGetResponse" />
+			<xs:element name="checkProfilePost" type="tns:checkProfilePost" />
+			<xs:element name="checkProfilePostResponse" type="tns:checkProfilePostResponse" />
+			<xs:element name="hasRightsTo" type="tns:hasRightsTo" />
+			<xs:element name="hasRightsToResponse" type="tns:hasRightsToResponse" />
+			<xs:element name="isLogged" type="tns:isLogged" />
+			<xs:element name="isLoggedResponse" type="tns:isLoggedResponse" />
+			<xs:element name="login" type="tns:login" />
+			<xs:element name="loginPOST" type="tns:loginPOST" />
+			<xs:element name="loginPOSTResponse" type="tns:loginPOSTResponse" />
+			<xs:element name="loginResponse" type="tns:loginResponse" />
+			<xs:element name="logout" type="tns:logout" />
+			<xs:element name="logoutResponse" type="tns:logoutResponse" />
+			<xs:complexType name="login">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="arg0" type="xs:string" />
+					<xs:element minOccurs="0" name="arg1" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="loginResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="return" type="tns:response" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType abstract="true" name="response">
+				<xs:sequence />
+			</xs:complexType>
+
+			<xs:complexType name="loginPOST">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="arg0" type="tns:userLoginData" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="userLoginData">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="devToolsOn" type="xs:boolean" />
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="requiredModules" nillable="true" type="xs:string" />
+					<xs:element minOccurs="0" name="validateUniqueLogin"
+						type="xs:boolean" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="loginPOSTResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="return" type="tns:response" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="checkPost">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="arg0" type="xs:string" />
+					<xs:element minOccurs="0" name="arg1" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="checkPostResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="return" type="tns:response" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="isLogged">
+				<xs:sequence />
+			</xs:complexType>
+
+			<xs:complexType name="isLoggedResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="return" type="tns:response" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="checkProfilePost">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="arg0" type="xs:string" />
+					<xs:element minOccurs="0" name="arg1" type="xs:string" />
+					<xs:element minOccurs="0" name="arg2" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="checkProfilePostResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="return" type="tns:response" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="checkGet">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="arg0" type="xs:string" />
+					<xs:element minOccurs="0" name="arg1" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="checkGetResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="return" type="tns:response" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="checkProfileGet">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="arg0" type="xs:string" />
+					<xs:element minOccurs="0" name="arg1" type="xs:string" />
+					<xs:element minOccurs="0" name="arg2" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="checkProfileGetResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="return" type="tns:response" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="logout">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="arg0" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="logoutResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="return" type="tns:response" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="hasRightsTo">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="arg0"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="hasRightsToResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="return" type="tns:response" />
+				</xs:sequence>
+			</xs:complexType>
+
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="isLoggedResponse">
+		<wsdl:part element="tns:isLoggedResponse" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="checkGetResponse">
+		<wsdl:part element="tns:checkGetResponse" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="checkProfilePost">
+		<wsdl:part element="tns:checkProfilePost" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="checkGet">
+		<wsdl:part element="tns:checkGet" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="checkProfileGet">
+		<wsdl:part element="tns:checkProfileGet" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="logout">
+		<wsdl:part element="tns:logout" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="hasRightsTo">
+		<wsdl:part element="tns:hasRightsTo" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="login">
+		<wsdl:part element="tns:login" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="loginPOSTResponse">
+		<wsdl:part element="tns:loginPOSTResponse" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="checkProfilePostResponse">
+		<wsdl:part element="tns:checkProfilePostResponse" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="loginPOST">
+		<wsdl:part element="tns:loginPOST" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="checkPost">
+		<wsdl:part element="tns:checkPost" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="isLogged">
+		<wsdl:part element="tns:isLogged" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="checkProfileGetResponse">
+		<wsdl:part element="tns:checkProfileGetResponse" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="loginResponse">
+		<wsdl:part element="tns:loginResponse" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="logoutResponse">
+		<wsdl:part element="tns:logoutResponse" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="checkPostResponse">
+		<wsdl:part element="tns:checkPostResponse" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="hasRightsToResponse">
+		<wsdl:part element="tns:hasRightsToResponse" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="OperatorWebService">
+		<wsdl:operation name="login">
+			<wsdl:input message="tns:login" name="login">
+			</wsdl:input>
+			<wsdl:output message="tns:loginResponse" name="loginResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="loginPOST">
+			<wsdl:input message="tns:loginPOST" name="loginPOST">
+			</wsdl:input>
+			<wsdl:output message="tns:loginPOSTResponse" name="loginPOSTResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="checkPost">
+			<wsdl:input message="tns:checkPost" name="checkPost">
+			</wsdl:input>
+			<wsdl:output message="tns:checkPostResponse" name="checkPostResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="isLogged">
+			<wsdl:input message="tns:isLogged" name="isLogged">
+			</wsdl:input>
+			<wsdl:output message="tns:isLoggedResponse" name="isLoggedResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="checkProfilePost">
+			<wsdl:input message="tns:checkProfilePost" name="checkProfilePost">
+			</wsdl:input>
+			<wsdl:output message="tns:checkProfilePostResponse" name="checkProfilePostResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="checkGet">
+			<wsdl:input message="tns:checkGet" name="checkGet">
+			</wsdl:input>
+			<wsdl:output message="tns:checkGetResponse" name="checkGetResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="checkProfileGet">
+			<wsdl:input message="tns:checkProfileGet" name="checkProfileGet">
+			</wsdl:input>
+			<wsdl:output message="tns:checkProfileGetResponse" name="checkProfileGetResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="logout">
+			<wsdl:input message="tns:logout" name="logout">
+			</wsdl:input>
+			<wsdl:output message="tns:logoutResponse" name="logoutResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="hasRightsTo">
+			<wsdl:input message="tns:hasRightsTo" name="hasRightsTo">
+			</wsdl:input>
+			<wsdl:output message="tns:hasRightsToResponse" name="hasRightsToResponse">
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="operatorServiceSoapBinding" type="tns:OperatorWebService">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="login">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="login">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="loginResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="loginPOST">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="loginPOST">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="loginPOSTResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="checkPost">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="checkPost">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="checkPostResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="isLogged">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="isLogged">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="isLoggedResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="checkProfilePost">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="checkProfilePost">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="checkProfilePostResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="checkGet">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="checkGet">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="checkGetResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="checkProfileGet">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="checkProfileGet">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="checkProfileGetResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="logout">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="logout">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="logoutResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="hasRightsTo">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="hasRightsTo">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="hasRightsToResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="operatorService">
+		<wsdl:port binding="tns:operatorServiceSoapBinding" name="OperatorWebServicePort">
+			<soap:address
+				location="http://localhost:7070/next-app/services/soap/operatorService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
