@@ -1,0 +1,239 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://verto.streamsoft.pl"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http"
+	name="good" targetNamespace="http://verto.streamsoft.pl">
+	<wsdl:types>
+		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+			xmlns:tns="http://verto.streamsoft.pl" attributeFormDefault="unqualified"
+			elementFormDefault="unqualified" targetNamespace="http://verto.streamsoft.pl">
+			<xs:element name="add" type="tns:add" />
+			<xs:element name="addResponse" type="tns:addResponse" />
+			<xs:element name="delete" type="tns:delete" />
+			<xs:element name="deleteResponse" type="tns:deleteResponse" />
+			<xs:element name="get" type="tns:get" />
+			<xs:element name="getResponse" type="tns:getResponse" />
+			<xs:element name="update" type="tns:update" />
+			<xs:element name="updateResponse" type="tns:updateResponse" />
+			<xs:complexType name="get">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="index" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="return" type="tns:goodWO" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="goodWO">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="idGood" type="xs:long" />
+					<xs:element minOccurs="0" name="index" type="xs:string" />
+					<xs:element minOccurs="0" name="shortName" type="xs:string" />
+					<xs:element minOccurs="0" name="longName" type="xs:string" />
+					<xs:element name="isActive" type="xs:boolean" />
+					<xs:element minOccurs="0" name="idUnit" type="xs:long" />
+					<xs:element minOccurs="0" name="unit" type="xs:string" />
+					<xs:element minOccurs="0" name="idVatRate" type="xs:long" />
+					<xs:element minOccurs="0" name="vatRate" type="xs:string" />
+					<xs:element minOccurs="0" name="idGoodType" type="xs:long" />
+					<xs:element minOccurs="0" name="goodType" type="xs:string" />
+					<xs:element minOccurs="0" name="eanCode" type="xs:string" />
+					<xs:element name="goodIsUsedInWarehouse" type="xs:boolean" />
+					<xs:element name="goodIsUsedInSale" type="xs:boolean" />
+					<xs:element name="goodIsUsedInPurchase" type="xs:boolean" />
+					<xs:element name="goodIsUsedInSupply" type="xs:boolean" />
+					<xs:element minOccurs="0" name="notes" type="xs:string" />
+					<xs:element minOccurs="0" name="warnings" type="xs:string" />
+					<xs:element minOccurs="0" name="idProducer" type="xs:long" />
+					<xs:element minOccurs="0" name="producer" type="xs:string" />
+					<xs:element name="isPurchaseReverseCharge" type="xs:boolean" />
+					<xs:element name="isSaleReverseCharge" type="xs:boolean" />
+					<xs:element minOccurs="0" name="lastModifiedDate" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="delete">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="idGood" type="xs:long" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="deleteResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="return" type="xs:boolean" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="update">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="idGood" type="xs:long" />
+					<xs:element minOccurs="0" name="index" type="xs:string" />
+					<xs:element minOccurs="0" name="shortName" type="xs:string" />
+					<xs:element minOccurs="0" name="longName" type="xs:string" />
+					<xs:element minOccurs="0" name="goodType" type="xs:string" />
+					<xs:element minOccurs="0" name="unitCode" type="xs:string" />
+					<xs:element minOccurs="0" name="producerName" type="xs:string" />
+					<xs:element minOccurs="0" name="eanCode" type="xs:string" />
+					<xs:element minOccurs="0" name="notes" type="xs:string" />
+					<xs:element minOccurs="0" name="warnings" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="updateResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="return" type="xs:boolean" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="add">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="index" type="xs:string" />
+					<xs:element minOccurs="0" name="shortName" type="xs:string" />
+					<xs:element minOccurs="0" name="longName" type="xs:string" />
+					<xs:element minOccurs="0" name="goodType" type="xs:string" />
+					<xs:element minOccurs="0" name="unitCode" type="xs:string" />
+					<xs:element minOccurs="0" name="vatRateCode" type="xs:string" />
+					<xs:element minOccurs="0" name="producerName" type="xs:string" />
+					<xs:element minOccurs="0" name="eanCode" type="xs:string" />
+					<xs:element minOccurs="0" name="notes" type="xs:string" />
+					<xs:element minOccurs="0" name="warnings" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="addResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="return" type="xs:long" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="WebServiceException" type="tns:WebServiceException" />
+			<xs:complexType name="WebServiceException">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="message" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="updateResponse">
+		<wsdl:part element="tns:updateResponse" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="delete">
+		<wsdl:part element="tns:delete" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="update">
+		<wsdl:part element="tns:update" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="get">
+		<wsdl:part element="tns:get" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getResponse">
+		<wsdl:part element="tns:getResponse" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="addResponse">
+		<wsdl:part element="tns:addResponse" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="deleteResponse">
+		<wsdl:part element="tns:deleteResponse" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="WebServiceException">
+		<wsdl:part element="tns:WebServiceException" name="WebServiceException">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="add">
+		<wsdl:part element="tns:add" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="GoodWebService">
+		<wsdl:operation name="get">
+			<wsdl:input message="tns:get" name="get">
+			</wsdl:input>
+			<wsdl:output message="tns:getResponse" name="getResponse">
+			</wsdl:output>
+			<wsdl:fault message="tns:WebServiceException" name="WebServiceException">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="delete">
+			<wsdl:input message="tns:delete" name="delete">
+			</wsdl:input>
+			<wsdl:output message="tns:deleteResponse" name="deleteResponse">
+			</wsdl:output>
+			<wsdl:fault message="tns:WebServiceException" name="WebServiceException">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="update">
+			<wsdl:input message="tns:update" name="update">
+			</wsdl:input>
+			<wsdl:output message="tns:updateResponse" name="updateResponse">
+			</wsdl:output>
+			<wsdl:fault message="tns:WebServiceException" name="WebServiceException">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="add">
+			<wsdl:input message="tns:add" name="add">
+			</wsdl:input>
+			<wsdl:output message="tns:addResponse" name="addResponse">
+			</wsdl:output>
+			<wsdl:fault message="tns:WebServiceException" name="WebServiceException">
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="goodSoapBinding" type="tns:GoodWebService">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="get">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="get">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="getResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="WebServiceException">
+				<soap:fault name="WebServiceException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="delete">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="delete">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="deleteResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="WebServiceException">
+				<soap:fault name="WebServiceException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="update">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="update">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="updateResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="WebServiceException">
+				<soap:fault name="WebServiceException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="add">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="add">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="addResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="WebServiceException">
+				<soap:fault name="WebServiceException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="good">
+		<wsdl:port binding="tns:goodSoapBinding" name="GoodWebServicePort">
+			<soap:address
+				location="https://test.verto.streamsoft.pl/next-app/services/soap/good" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

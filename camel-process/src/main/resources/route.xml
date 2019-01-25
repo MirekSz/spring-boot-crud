@@ -29,10 +29,28 @@
 		<transform>
 			<constant>Hello World</constant>
 		</transform>
-		<to uri="direct:activemq" pattern="RobustInOnly"/>
+		<to uri="direct:activemq" pattern="RobustInOnly" />
 	</route>
 	<route id="activemq">
 		<from uri="direct:activemq" />
 		<to uri="activemq:samples" />
+	</route>
+	<route id="activemq-consumer" >
+		<from uri="activemq:samples" />
+		<to uri="log:activemq-samples" />
+	</route>
+	<route id="suspendRestartRoutes">
+		<from uri="timer:foo?period=60s" />
+		<to uri="controlbus:route?routeId=activemq-consumer&amp;action=status" />
+		<to uri="log:activemq-status"/>
+		<choice>
+			<when>
+				<simple>${body} == 'Started'</simple>
+				<to uri="controlbus:route?routeId=activemq-consumer&amp;action=suspend" />
+			</when>
+			<otherwise>
+				<to uri="controlbus:route?routeId=activemq-consumer&amp;action=resume" />
+			</otherwise>
+		</choice>
 	</route>
 </routes>

@@ -1,14 +1,22 @@
 
 package pl.com.stream.camel.process.lib;
 
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
+import org.apache.camel.builder.DeadLetterChannelBuilder;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.servlet.CamelHttpTransportServlet;
 import org.apache.camel.model.rest.RestBindingMode;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.google.common.base.Throwables;
 
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -23,8 +31,44 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class RestConfig extends RouteBuilder {
 
-	@Bean
+	static Logger log = LoggerFactory.getLogger(RestConfig.class);
 
+	@Bean
+	public NoopHostnameVerifier allowAllHostnameVerifier() {
+		return new NoopHostnameVerifier();
+
+	}
+
+	@Bean
+	public DeadLetterChannelBuilder deadLetterChannel() {
+		DeadLetterChannelBuilder builder = new DeadLetterChannelBuilder();
+		builder.setDeadLetterUri("jms:queue:dead");
+		builder.maximumRedeliveries(3);
+		builder.redeliveryDelay(5000);
+		builder.backOffMultiplier(2);
+		builder.onPrepareFailure(new Processor() {
+
+			@Override
+			public void process(final Exchange exchange) throws Exception {
+				Exception cause = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Exception.class);
+				exchange.getIn().setHeader("FailedBecause", Throwables.getStackTraceAsString(cause) + " MIrek");
+
+			}
+		});
+		builder.onExceptionOccurred(new Processor() {
+
+			@Override
+			public void process(final Exchange exchange) throws Exception {
+				Integer property = exchange.getIn().getHeader(Exchange.REDELIVERY_COUNTER, Integer.class);
+				Exception cause = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Exception.class);
+				log.error("Retry " + property, cause);
+			}
+		});
+		return builder;
+
+	}
+
+	@Bean
 	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.basePackage("pl.com.stream.camel.process"))
 				.paths(PathSelectors.regex("/.*")).build().apiInfo(apiEndPointsInfo());
@@ -65,12 +109,12 @@ public class RestConfig extends RouteBuilder {
 
 		@RequestMapping("/swagger-ui")
 		public String redirectToUi() {
-			return "redirect:/webjars/swagger-ui/index.html?url=/api/swagger&validatorUrl=";
+			return "redirect:/esb/webjars/swagger-ui/index.html?url=/api/swagger&validatorUrl=";
 		}
 
 		@RequestMapping("/swagger-ui2")
 		public String redirectToUi2() {
-			return "redirect:/webjars/swagger-ui/index.html?url=/v2/api-docs&validatorUrl=";
+			return "redirect:/esb/webjars/swagger-ui/index.html?url=/v2/api-docs&validatorUrl=";
 		}
 	}
 }

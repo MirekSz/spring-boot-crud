@@ -1,0 +1,41 @@
+<routes xmlns="http://camel.apache.org/schema/spring" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring-2.23.1.xsd">
+	<route id="good-gateway">
+		<from uri="cxf://goods?dataFormat=PAYLOAD&amp;wsdlURL=wsdl/good.wsdl" />
+		<to uri="activemq:good-buffer" pattern="InOnly" />
+		<to uri="log:good-gateway" />
+	</route>
+	<route id="good-process" errorHandlerRef="deadLetterChannel">
+		<from uri="activemq:good-buffer" />
+		<convertBodyTo type="String" />
+		<transform>
+			<groovy>
+			import groovy.xml.*;
+
+			def manifest = new  XmlParser().parseText(exchange.in.body)
+			def value =  manifest.index[0].text();
+
+			if(value == 'Jednostka miary'){
+				manifest.index[0].value = 'Unit';
+			}
+			exchange.in.body = XmlUtil.serialize(manifest)
+			</groovy>
+		</transform>
+		<to uri="log:good-buffer" />
+		<to uri="seda:file" />
+		<to
+			uri="cxf://send?dataFormat=PAYLOAD&amp;address=https://test.verto.streamsoft.pl/next-app/services/soap/good&amp;wsdlURL=https://test.verto.streamsoft.pl/next-app/services/soap/good\?wsdl" />
+	</route>
+	<route id="save-to-file">
+		<from uri="seda:file" />
+		<transform>
+			<groovy>
+			exchange.in.body = ["eventType":"good", "body": groovy.xml.XmlUtil.escapeXml(exchange.in.body)]
+			</groovy>
+		</transform>
+		  <marshal >
+		  <json library="Jackson"/>
+		  </marshal>
+		<to uri="file:./goods?fileName=${headers.Sender}/${exchangeId}" />
+	</route>
+</routes>
