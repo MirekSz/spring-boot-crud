@@ -1,9 +1,16 @@
 <routes xmlns="http://camel.apache.org/schema/spring" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring-2.23.1.xsd">
-	<route id="good-gateway">
+	<route id="good-ws-gateway">
 		<from uri="cxf://goods?dataFormat=PAYLOAD&amp;wsdlURL=wsdl/good.wsdl" />
+		<to uri="log:good-ws-gateway" />
 		<to uri="activemq:good-buffer" pattern="InOnly" />
-		<to uri="log:good-gateway" />
+	</route>
+	<route id="good-file-gateway">
+		<from uri="file://./goods-in" />
+		<to uri="log:good-file-gateway" />
+		<convertBodyTo type="String" />
+		<to uri="freemarker:/transform.ftl"/>
+		<to uri="activemq:good-buffer" pattern="InOnly" />
 	</route>
 	<route id="good-process" errorHandlerRef="deadLetterChannel">
 		<from uri="activemq:good-buffer" />
@@ -23,8 +30,8 @@
 		</transform>
 		<to uri="log:good-buffer" />
 		<to uri="seda:file" />
-		<to
-			uri="cxf://send?dataFormat=PAYLOAD&amp;address=https://test.verto.streamsoft.pl/next-app/services/soap/good&amp;wsdlURL=https://test.verto.streamsoft.pl/next-app/services/soap/good\?wsdl" />
+	<!-- 	<to
+			uri="cxf://send?dataFormat=PAYLOAD&amp;address=https://test.verto.streamsoft.pl/next-app/services/soap/good&amp;wsdlURL=https://test.verto.streamsoft.pl/next-app/services/soap/good\?wsdl" /> -->
 	</route>
 	<route id="save-to-file">
 		<from uri="seda:file" />
@@ -36,6 +43,15 @@
 		  <marshal >
 		  <json library="Jackson"/>
 		  </marshal>
-		<to uri="file:./goods?fileName=${headers.Sender}/${exchangeId}" />
+		<to uri="file:./goods-out?fileName=${headers.Sender}/${exchangeId}" />
+	</route>
+
+	<route id="stop-processing">
+		<from uri="quartz2://good/stop?cron=0+52+*+*+*+?" />
+		<to uri="controlbus:route?routeId=good-process&amp;action=suspend" />
+	</route>
+	<route id="start-processing">
+		<from uri="quartz2://good/start?cron=0+53+*+*+*+?" />
+		<to uri="controlbus:route?routeId=good-process&amp;action=resume" />
 	</route>
 </routes>
