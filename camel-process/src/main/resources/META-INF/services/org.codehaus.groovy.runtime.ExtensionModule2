@@ -1,0 +1,4 @@
+moduleName=Some-Utils
+moduleVersion=1.0
+extensionClasses=
+staticExtensionClasses=StaticStringExtension

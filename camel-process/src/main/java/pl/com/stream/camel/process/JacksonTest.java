@@ -2,6 +2,7 @@
 package pl.com.stream.camel.process;
 
 import org.apache.commons.io.IOUtils;
+import org.codehaus.groovy.control.CompilerConfiguration;
 
 import groovy.lang.GroovyShell;
 import groovy.util.XmlSlurper;
@@ -12,6 +13,8 @@ import groovy.util.slurpersupport.GPathResult;
 public class JacksonTest {
 
 	public static void main(final String[] args) throws Exception {
+		CompilerConfiguration compilerConfiguration = new CompilerConfiguration();
+		compilerConfiguration.setClasspath("StaticStringExtension.groovy");
 		GroovyShell groovyShell = new GroovyShell();
 		String xml =
 				"<Person><firstName>Stefan</firstName><children><child age=\"5\"><fullAge age=\"12\">false</fullAge></child><child age=\"15\"><fullAge>false</fullAge></child></children></Person>";
@@ -20,6 +23,7 @@ public class JacksonTest {
 
 		groovyShell.setVariable("xml", parseText);
 		groovyShell.evaluate(IOUtils.toString(JacksonTest.class.getResourceAsStream("/script.groovy")));
+		groovyShell.evaluate("println '2312'.int()");
 		// JacksonXmlModule
 
 		// SimpleModule testModule = new SimpleModule("MyModule", new Version(1, 0, 0, null)) {
