@@ -1,6 +1,8 @@
 
 package pl.com.stream.camel.process;
 
+import org.apache.commons.io.IOUtils;
+
 import groovy.lang.GroovyShell;
 import groovy.util.XmlSlurper;
 import groovy.util.slurpersupport.GPathResult;
@@ -17,8 +19,7 @@ public class JacksonTest {
 		GPathResult parseText = new XmlSlurper().parseText(xml);
 
 		groovyShell.setVariable("xml", parseText);
-		groovyShell.evaluate(
-				"xml.firstName.replaceNode { item(who: 'mrhaki', priority: '500') {title 'Download Grails 1.4 M1'}};xml.children.child.findAll {it.@age!=null}.each { \nit.@age.text().toInteger() >10?it.@miro='true':''\n};println groovy.xml.XmlUtil.serialize( xml ) ");
+		groovyShell.evaluate(IOUtils.toString(JacksonTest.class.getResourceAsStream("/script.groovy")));
 		// JacksonXmlModule
 
 		// SimpleModule testModule = new SimpleModule("MyModule", new Version(1, 0, 0, null)) {
