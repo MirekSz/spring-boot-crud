@@ -1,5 +1,9 @@
 <routes xmlns="http://camel.apache.org/schema/spring" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring-2.23.1.xsd">
+	<route id="catalog-ws-gateway">
+		<from uri="cxf://catalog?dataFormat=PAYLOAD&amp;wsdlURL=wsdl/Catalogue.wsdl" />
+		<to uri="log:catalog" />
+	</route>
 	<route id="good-ws-gateway">
 		<from uri="cxf://goods?dataFormat=PAYLOAD&amp;wsdlURL=wsdl/good.wsdl" />
 		<to uri="log:good-ws-gateway" />

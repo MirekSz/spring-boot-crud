@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://verto.streamsoft.pl"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http"
+	name="good" targetNamespace="http://verto.streamsoft.pl">
+	<wsdl:types>
+		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+			xmlns:tns="http://verto.streamsoft.pl" attributeFormDefault="unqualified"
+			elementFormDefault="unqualified" targetNamespace="http://verto.streamsoft.pl">
+			<xs:element name="get" type="tns:get" />
+			<xs:element name="getResponse" type="tns:getResponse" />
+			<xs:complexType name="get">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="index" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="return" type="tns:goodWO" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="goodWO">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="idGood" type="xs:long" />
+					<xs:element minOccurs="0" name="index" type="xs:string" />
+					<xs:element minOccurs="0" name="shortName" type="xs:string" />
+					<xs:element minOccurs="0" name="longName" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="WebServiceException" type="tns:WebServiceException" />
+			<xs:complexType name="WebServiceException">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="message" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="get">
+		<wsdl:part element="tns:get" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getResponse">
+		<wsdl:part element="tns:getResponse" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="WebServiceException">
+		<wsdl:part element="tns:WebServiceException" name="WebServiceException">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="GoodWebService">
+		<wsdl:operation name="get">
+			<wsdl:input message="tns:get" name="get">
+			</wsdl:input>
+			<wsdl:output message="tns:getResponse" name="getResponse">
+			</wsdl:output>
+			<wsdl:fault message="tns:WebServiceException" name="WebServiceException">
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="goodSoapBinding" type="tns:GoodWebService">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="get">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="get">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="getResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="WebServiceException">
+				<soap:fault name="WebServiceException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="good">
+		<wsdl:port binding="tns:goodSoapBinding" name="GoodWebServicePort">
+			<soap:address
+				location="https://test.verto.streamsoft.pl/next-app/services/soap/good" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
