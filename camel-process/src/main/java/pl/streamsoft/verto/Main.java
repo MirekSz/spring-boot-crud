@@ -13,6 +13,7 @@ public class Main {
 		BookType book = good.getGoodWebServicePort().getBook(parameters);
 		System.out.println(book.getTitle());
 		System.out.println(book.getAuthor());
+		System.out.println(book.getDate());
 
 	}
 

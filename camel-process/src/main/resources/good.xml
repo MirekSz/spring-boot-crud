@@ -10,13 +10,14 @@
 <c:bookResponse xmlns:c='http://www.eclipse.org/webtools/Catalogue'>
   <title>Poter</title>
   <author>mike</author>
-  <date>2018-09-12</date>
+  <date>2018</date>
   <isbn>12312312</isbn>
   <publisher>Amazon</publisher>
 </c:bookResponse>
 ]]>
 		</constant>
 		</transform>
+		<to uri="validator:wsdl/Catalogue.xsd"/>
 		<to uri="log:cos" />
 	</route>
 	<route id="good-ws-gateway">
