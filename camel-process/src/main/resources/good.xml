@@ -1,8 +1,23 @@
 <routes xmlns="http://camel.apache.org/schema/spring" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring-2.23.1.xsd">
 	<route id="catalog-ws-gateway">
-		<from uri="cxf://catalog?dataFormat=PAYLOAD&amp;wsdlURL=wsdl/Catalogue.wsdl" />
+		<from
+			uri="cxf://catalog?dataFormat=PAYLOAD&amp;wsdlURL=wsdl/Catalogue.wsdl" />
 		<to uri="log:catalog" />
+		<transform >
+			<constant>
+			<![CDATA[
+<c:bookResponse xmlns:c='http://www.eclipse.org/webtools/Catalogue'>
+  <title>Poter</title>
+  <author>mike</author>
+  <date>2018-09-12</date>
+  <isbn>12312312</isbn>
+  <publisher>Amazon</publisher>
+</c:bookResponse>
+]]>
+		</constant>
+		</transform>
+		<to uri="log:cos" />
 	</route>
 	<route id="good-ws-gateway">
 		<from uri="cxf://goods?dataFormat=PAYLOAD&amp;wsdlURL=wsdl/good.wsdl" />
@@ -13,7 +28,7 @@
 		<from uri="file://./goods-in" />
 		<to uri="log:good-file-gateway" />
 		<convertBodyTo type="String" />
-		<to uri="freemarker:/transform.ftl"/>
+		<to uri="freemarker:/transform.ftl" />
 		<to uri="activemq:good-buffer" pattern="InOnly" />
 	</route>
 	<route id="good-process" errorHandlerRef="deadLetterChannel">
@@ -34,8 +49,8 @@
 		</transform>
 		<to uri="log:good-buffer" />
 		<to uri="seda:file" />
-	<!-- 	<to
-			uri="cxf://send?dataFormat=PAYLOAD&amp;address=https://test.verto.streamsoft.pl/next-app/services/soap/good&amp;wsdlURL=https://test.verto.streamsoft.pl/next-app/services/soap/good\?wsdl" /> -->
+		<!-- <to uri="cxf://send?dataFormat=PAYLOAD&amp;address=https://test.verto.streamsoft.pl/next-app/services/soap/good&amp;wsdlURL=https://test.verto.streamsoft.pl/next-app/services/soap/good\?wsdl"
+			/> -->
 	</route>
 	<route id="save-to-file">
 		<from uri="seda:file" />
@@ -44,9 +59,9 @@
 			exchange.in.body = ["eventType":"good", "body": groovy.xml.XmlUtil.escapeXml(exchange.in.body)]
 			</groovy>
 		</transform>
-		  <marshal >
-		  <json library="Jackson"/>
-		  </marshal>
+		<marshal>
+			<json library="Jackson" />
+		</marshal>
 		<to uri="file:./goods-out?fileName=${headers.Sender}/${exchangeId}" />
 	</route>
 
