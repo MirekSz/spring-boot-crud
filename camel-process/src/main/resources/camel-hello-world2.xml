@@ -1,0 +1,62 @@
+<routes xmlns="http://camel.apache.org/schema/spring" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring-2.23.1.xsd">
+	<route id="jetty1">
+		<from uri="jetty:http://localhost:5456/hello" />
+		<choice>
+			<when>
+				<simple>${headers.content} != null</simple>
+				<setBody>
+					<simple>${headers.content}</simple>
+				</setBody>
+			</when>
+			<otherwise>
+				<setBody>
+					<constant>
+						RESPONSE FROM CAMEL -Hello World
+					</constant>
+				</setBody>
+			</otherwise>
+		</choice>
+		<enrich strategyRef="mergeAggregationStrategy">
+			<constant>
+		direct:e
+		</constant>
+		</enrich>
+		<to uri="log:pre?showHeaders=true" />
+		<to uri="activemq:queue:samples?exchangePattern=InOnly" />
+	</route>
+
+	<route id="e">
+		<from uri="direct:e" />
+		<transform>
+			<simple>
+			<![CDATA[
+      <rep:inputReportIncident xmlns:rep="http://reportincident.example.camel.apache.org">
+         <incidentId>${body}</incidentId>
+      </rep:inputReportIncident>
+]]>
+			</simple>
+		</transform>
+		<convertBodyTo type="org.w3c.dom.Document" />
+		<to uri="log:pe?showHeaders=true" />
+		<to
+			uri="cxf://send?dataFormat=PAYLOAD&amp;address=http://localhost:6070/incident&amp;wsdlURL=http://localhost:6070/incident\?wsdl" />
+		<convertBodyTo type="String" />
+		<to uri="log:e?showHeaders=true" />
+		<removeHeaders pattern="*" />
+		<setHeader headerName="name">
+			<constant>mirek</constant>
+		</setHeader>
+		<setHeader headerName="xml">
+			<simple>${body}</simple>
+		</setHeader>
+		<setBody >
+			<simple>null</simple>
+		</setBody>
+	</route>
+
+	<route id="from-async">
+		<from uri="activemq:queue:samples" />
+		<to uri="log:samples" />
+	</route>
+</routes>

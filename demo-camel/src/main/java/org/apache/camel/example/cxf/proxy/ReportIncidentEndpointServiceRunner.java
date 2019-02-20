@@ -7,7 +7,7 @@ import org.apache.camel.example.reportincident.InputReportIncident;
 import org.apache.camel.example.reportincident.OutputReportIncident;
 import org.apache.camel.example.reportincident.ReportIncidentEndpoint;
 
-public class ReportIncidentEndpointService implements ReportIncidentEndpoint {
+public class ReportIncidentEndpointServiceRunner implements ReportIncidentEndpoint {
 
 	@Override
 	public OutputReportIncident reportIncident(final InputReportIncident in) {
@@ -21,7 +21,7 @@ public class ReportIncidentEndpointService implements ReportIncidentEndpoint {
 	}
 
 	public static void main(final String[] args) {
-		Endpoint.publish("http://localhost:6070/incident", new ReportIncidentEndpointService());
+		Endpoint.publish("http://localhost:6070/incident", new ReportIncidentEndpointServiceRunner());
 	}
 
 }
